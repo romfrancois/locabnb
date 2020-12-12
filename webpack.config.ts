@@ -50,7 +50,7 @@ module.exports = {
         new ZipPlugin({
             // OPTIONAL: defaults to the Webpack output filename (above) or,
             // if not present, the basename of the path
-            filename: 'boilerplate.zip',
+            filename: 'locabnb.zip',
         }),
     ],
 };

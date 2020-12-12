@@ -16,5 +16,6 @@
         "jsx": "react"
     },
     "include": ["src", "src/res"],
-    "exclude": ["node_modules"]
+    "exclude": ["node_modules"],
+    "typeRoots": ["types/react-table-lite.d.ts"]
 }

@@ -1,17 +1,31 @@
 import { faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useEffect, useState } from 'react';
+
+import { store } from 'react-notifications-component';
+
 import { RenterContext } from '../../App';
 
 async function fetchData(url: string) {
-    const response = await fetch(url, {
-        method: 'POST',
-    });
+    const response = await fetch(url);
 
-    if (response) {
+    try {
         const json = await response.json();
-
         return json;
+    } catch (err) {
+        store.addNotification({
+            title: 'Erreur',
+            message: 'Problème avec les paramètres de connexion',
+            type: 'danger',
+            insert: 'top',
+            container: 'top-right',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+                duration: 4000,
+                onScreen: true,
+            },
+        });
     }
 
     return null;
@@ -22,7 +36,7 @@ const initClient = (options: { globalOptions: any; updateLoggedInStatus: (status
         .init(options.globalOptions)
         .then(() => {
             // Listen for sign-in state changes.
-            console.log('gapi.auth2', gapi.auth2);
+            // console.log('gapi.auth2', gapi.auth2);
             gapi.auth2.getAuthInstance().isSignedIn.listen(options.updateLoggedInStatus);
 
             // Handle the initial sign-in state.
@@ -30,6 +44,20 @@ const initClient = (options: { globalOptions: any; updateLoggedInStatus: (status
         })
         .catch((err: any) => {
             console.error('Caught error', err);
+
+            store.addNotification({
+                title: 'Erreur',
+                message: 'Erreur en se connectant au compte Google',
+                type: 'danger',
+                insert: 'top',
+                container: 'top-right',
+                animationIn: ['animate__animated', 'animate__fadeIn'],
+                animationOut: ['animate__animated', 'animate__fadeOut'],
+                dismiss: {
+                    duration: 4000,
+                    onScreen: true,
+                },
+            });
         });
 };
 
@@ -53,10 +81,48 @@ const GoogleConnection = (): JSX.Element => {
 
     const { dispatch } = useContext(RenterContext);
 
+    const {
+        state: {
+            status: { connected },
+        },
+    } = useContext(RenterContext);
+
     const [loggedInStatus, setLoggedInStatus] = useState<boolean>(false);
     const [initiatedClient, setInitiatedClient] = useState<boolean>(false);
 
     const [globalOptions, setGlobalOptions] = useState();
+
+    useEffect(() => {
+        if (connected) {
+            store.addNotification({
+                title: 'Connecté',
+                message: 'Vous êtes maintenant connecté à votre compte Google',
+                type: 'success',
+                insert: 'top',
+                container: 'top-right',
+                animationIn: ['animate__animated', 'animate__fadeIn'],
+                animationOut: ['animate__animated', 'animate__fadeOut'],
+                dismiss: {
+                    duration: 3000,
+                    onScreen: true,
+                },
+            });
+        } else {
+            store.addNotification({
+                title: 'Déconnecté',
+                message: "Vous n'êtes plus connecté à votre compte Google",
+                type: 'warning',
+                insert: 'top',
+                container: 'top-right',
+                animationIn: ['animate__animated', 'animate__fadeIn'],
+                animationOut: ['animate__animated', 'animate__fadeOut'],
+                dismiss: {
+                    duration: 4000,
+                    onScreen: true,
+                },
+            });
+        }
+    }, [connected]);
 
     useEffect(() => {
         const retrieveGoogleParam = async (url: string) => {
@@ -79,7 +145,7 @@ const GoogleConnection = (): JSX.Element => {
                 initClient({
                     globalOptions,
                     updateLoggedInStatus: (status) => {
-                        console.log('Login status', status);
+                        // console.log('Login status', status);
                         setLoggedInStatus(status);
                         dispatch({ type: 'setConnected', value: status });
                     },

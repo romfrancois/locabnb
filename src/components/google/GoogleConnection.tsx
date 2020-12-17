@@ -6,44 +6,44 @@ import { store } from 'react-notifications-component';
 
 import { RenterContext } from '../../App';
 
-// async function fetchData(url: string) {
-//     const response = await fetch(url);
-
-//     try {
-//         const json = await response.json();
-//         return json;
-//     } catch (err) {
-//         store.addNotification({
-//             title: 'Erreur',
-//             message: 'Problème avec les paramètres de connexion',
-//             type: 'danger',
-//             insert: 'top',
-//             container: 'top-right',
-//             animationIn: ['animate__animated', 'animate__fadeIn'],
-//             animationOut: ['animate__animated', 'animate__fadeOut'],
-//             dismiss: {
-//                 duration: 4000,
-//                 onScreen: true,
-//             },
-//         });
-//     }
-
-//     return null;
-// }
-
 async function fetchData(url: string) {
-    const response = await fetch(url, {
-        method: 'POST',
-    });
+    const response = await fetch(url);
 
-    if (response) {
+    try {
         const json = await response.json();
-
         return json;
+    } catch (err) {
+        store.addNotification({
+            title: 'Erreur',
+            message: 'Problème avec les paramètres de connexion',
+            type: 'danger',
+            insert: 'top',
+            container: 'top-right',
+            animationIn: ['animate__animated', 'animate__fadeIn'],
+            animationOut: ['animate__animated', 'animate__fadeOut'],
+            dismiss: {
+                duration: 4000,
+                onScreen: true,
+            },
+        });
     }
 
     return null;
 }
+
+// async function fetchData(url: string) {
+//     const response = await fetch(url, {
+//         method: 'POST',
+//     });
+
+//     if (response) {
+//         const json = await response.json();
+
+//         return json;
+//     }
+
+//     return null;
+// }
 
 const initClient = (options: { globalOptions: any; updateLoggedInStatus: (status: boolean) => void }) => {
     gapi.client
@@ -149,7 +149,7 @@ const GoogleConnection = (): JSX.Element => {
             }
         };
 
-        const credentialsURL = `/.netlify/functions/credentials`;
+        const credentialsURL = `/.netlify/functions/globalOptions`;
         retrieveGoogleParam(credentialsURL);
     }, []);
 

@@ -8,7 +8,7 @@ import nanoid from 'nanoid';
 import { RenterContext } from '../App';
 import GoogleConnection from './google/GoogleConnection';
 
-type Action = { type: 'setConnected'; value: boolean };
+type Action = { type: 'setGoogleConnected'; value: boolean };
 
 type contextProp = {
     dispatch: React.Dispatch<Action>;
@@ -22,10 +22,9 @@ const MenuComponent = (): JSX.Element => {
     const { dispatch } = useContext(RenterContext);
 
     const {
-        state: {
-            status: { connected },
-        },
+        state: { status },
     } = useContext(RenterContext);
+    const { googleState } = status;
 
     const handleMenu = (e: React.MouseEvent<HTMLButtonElement>): void => {
         e.persist();
@@ -54,7 +53,12 @@ const MenuComponent = (): JSX.Element => {
                     <span>Formulaire</span>
                 </button>
 
-                <button type="submit" name="setTable" onClick={handleMenu} disabled={!connected}>
+                <button
+                    type="submit"
+                    name="setTable"
+                    onClick={handleMenu}
+                    disabled={!(googleState?.connected && googleState?.gsheet)}
+                >
                     <FontAwesomeIcon className="faStyle fa-3x" icon={faTable} />
                     <span>Table</span>
                 </button>

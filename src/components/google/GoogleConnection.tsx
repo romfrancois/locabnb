@@ -6,31 +6,6 @@ import { store } from 'react-notifications-component';
 
 import { RenterContext } from '../../App';
 
-async function fetchData(url: string) {
-    const response = await fetch(url);
-
-    try {
-        const json = await response.json();
-        return json;
-    } catch (err) {
-        store.addNotification({
-            title: 'Erreur',
-            message: 'Problème avec les paramètres de connexion',
-            type: 'danger',
-            insert: 'top',
-            container: 'top-right',
-            animationIn: ['animate__animated', 'animate__fadeIn'],
-            animationOut: ['animate__animated', 'animate__fadeOut'],
-            dismiss: {
-                duration: 4000,
-                onScreen: true,
-            },
-        });
-    }
-
-    return null;
-}
-
 const initClient = (options: { globalOptions: any; updateLoggedInStatus: (status: boolean) => void }) => {
     gapi.client
         .init(options.globalOptions)
@@ -83,12 +58,13 @@ const GoogleConnection = (): JSX.Element => {
 
     const {
         state: {
-            status: { connected },
+            status: {
+                googleState: { connected },
+            },
         },
     } = useContext(RenterContext);
 
     const [loggedInStatus, setLoggedInStatus] = useState<boolean>(false);
-    // const [initiatedClient, setInitiatedClient] = useState<boolean>(false);
 
     const [globalOptions, setGlobalOptions] = useState({});
 
@@ -139,6 +115,20 @@ const GoogleConnection = (): JSX.Element => {
                 }
             } catch (err) {
                 console.log('Error while retrieving options!');
+
+                store.addNotification({
+                    title: 'Erreur',
+                    message: 'Problème avec les paramètres de connexion',
+                    type: 'danger',
+                    insert: 'top',
+                    container: 'top-right',
+                    animationIn: ['animate__animated', 'animate__fadeIn'],
+                    animationOut: ['animate__animated', 'animate__fadeOut'],
+                    dismiss: {
+                        duration: 4000,
+                        onScreen: true,
+                    },
+                });
             }
         };
 
@@ -155,14 +145,12 @@ const GoogleConnection = (): JSX.Element => {
                     updateLoggedInStatus: (status) => {
                         // console.log('Login status', status);
                         setLoggedInStatus(status);
-                        dispatch({ type: 'setConnected', value: status });
+                        dispatch({ type: 'setGoogleConnected', value: status });
                     },
                 });
             }
         });
-
-        // setInitiatedClient(true);
-    }, [dispatch, globalOptions /* initiatedClient, */ /* loggedInStatus */]);
+    }, [dispatch, globalOptions]);
 
     return (
         <LogInOutButton

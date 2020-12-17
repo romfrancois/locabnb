@@ -130,7 +130,12 @@ const GoogleSheet = (): JSX.Element => {
 
     const {
         state: {
-            status: { connected, action, nextInsertionRow, row },
+            status: {
+                googleState: { connected },
+                action,
+                nextInsertionRow,
+                row,
+            },
             info,
             dates,
             document,
@@ -159,6 +164,8 @@ const GoogleSheet = (): JSX.Element => {
                 .then(
                     (response) => {
                         console.log('response: ', response);
+                        dispatch({ type: 'setGSheetConnected', value: true });
+
                         const tab: Map<string, Array<string>> = new Map();
 
                         response.result.values?.shift();
@@ -175,6 +182,22 @@ const GoogleSheet = (): JSX.Element => {
                     },
                     (response) => {
                         console.error(`Error: ${response.result.error.message}`);
+
+                        dispatch({ type: 'setGSheetConnected', value: false });
+
+                        store.addNotification({
+                            title: 'Erreur',
+                            message: "Votre compte Google n'a pas l'autorisation d'accès au fichier Excel",
+                            type: 'danger',
+                            insert: 'top',
+                            container: 'top-right',
+                            animationIn: ['animate__animated', 'animate__fadeIn'],
+                            animationOut: ['animate__animated', 'animate__fadeOut'],
+                            dismiss: {
+                                duration: 4000,
+                                onScreen: true,
+                            },
+                        });
                     },
                 );
         };
@@ -182,7 +205,7 @@ const GoogleSheet = (): JSX.Element => {
         if (connected || action === 'updated') {
             getLatestRenters();
         }
-    }, [action, connected]);
+    }, [action, dispatch, connected]);
 
     useEffect(() => {
         console.log('rawRenters: ', rawRenters?.size);

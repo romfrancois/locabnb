@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useReducer } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFile, faSave } from '@fortawesome/free-solid-svg-icons';
@@ -19,8 +19,9 @@ import GoogleSheet from './components/google/GoogleSheet';
 import MenuComponent from './components/Menu';
 
 type Action =
-    | { type: 'setConnected'; value: boolean }
-    | { type: 'setState'; value: { action: 'save' | 'update' | 'updated'; row?: number; nextInsertionRow?: number } }
+    | { type: 'setGoogleConnected'; value: boolean }
+    | { type: 'setGSheetConnected'; value: boolean }
+    | { type: 'setState'; value: { action: 'save' | 'updated'; row?: number; nextInsertionRow?: number } }
     | { type: 'setNbRenters'; value: number }
     | { type: 'setSelectedRenter'; value: number }
     | { type: 'setInfo'; value: Info }
@@ -46,18 +47,32 @@ const locabnbIS: LocaBnBApp = {
     options: {} as Options,
     document: {} as Document,
     loadDataToState: {} as Array<string>,
-    status: {} as State,
+    status: { googleState: {} } as State,
     menuSelected: 'form',
 };
 
 function locabnbReducer(state: LocaBnBApp, action: Action) {
     switch (action.type) {
-        case 'setConnected':
+        case 'setGoogleConnected':
             return {
                 ...state,
                 status: {
                     ...state.status,
-                    connected: action.value,
+                    googleState: {
+                        ...state.status.googleState,
+                        connected: action.value,
+                    },
+                },
+            };
+        case 'setGSheetConnected':
+            return {
+                ...state,
+                status: {
+                    ...state.status,
+                    googleState: {
+                        ...state.status.googleState,
+                        gsheet: action.value,
+                    },
                 },
             };
         case 'setState':
@@ -121,7 +136,7 @@ function locabnbReducer(state: LocaBnBApp, action: Action) {
                 status: {
                     ...locabnbIS.status,
                     nextInsertionRow: state.status.nextInsertionRow,
-                    connected: state.status.connected,
+                    googleState: state.status.googleState,
                 },
             };
         case 'setMenuSelected':
@@ -191,7 +206,7 @@ const App = (): JSX.Element => {
                     <div className="menuButtons">
                         <button type="submit" name="resetData" onClick={handleOnClick}>
                             <FontAwesomeIcon className="faStyle fa-3x" icon={faFile} />
-                            <span>Remettre à zéro le formualaire</span>
+                            <span>Remettre à zéro le formulaire</span>
                         </button>
 
                         <button

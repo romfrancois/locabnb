@@ -1,5 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Table from 'react-table-lite';
+import nanoid from 'nanoid';
+import { store } from 'react-notifications-component';
+
 import { RenterContext } from '../../App';
 
 type tableDataType = {
@@ -208,7 +211,7 @@ const GoogleSheet = (): JSX.Element => {
         if (action === 'save') {
             console.log('saving data to sheet');
 
-            const data2Backup: Array<any> = ['someID'];
+            const data2Backup: Array<any> = [nanoid(10)];
 
             parseData(info, data2Backup);
             parseData(dates, data2Backup);
@@ -239,6 +242,34 @@ const GoogleSheet = (): JSX.Element => {
 
                     if (response.status === 200) {
                         dispatch({ type: 'setState', value: { action: 'updated' } });
+
+                        store.addNotification({
+                            title: 'Location enregistrée',
+                            message: 'La location est correctement enregistrée dans le fichier Excel',
+                            type: 'success',
+                            insert: 'top',
+                            container: 'top-right',
+                            animationIn: ['animate__animated', 'animate__fadeIn'],
+                            animationOut: ['animate__animated', 'animate__fadeOut'],
+                            dismiss: {
+                                duration: 5000,
+                                onScreen: true,
+                            },
+                        });
+                    } else {
+                        store.addNotification({
+                            title: "Erreur dans l'enregistrement",
+                            message: "La location n'a pas pu être correctement enregistrée dans le fichier Excel",
+                            type: 'danger',
+                            insert: 'top',
+                            container: 'top-right',
+                            animationIn: ['animate__animated', 'animate__fadeIn'],
+                            animationOut: ['animate__animated', 'animate__fadeOut'],
+                            dismiss: {
+                                duration: 5000,
+                                onScreen: true,
+                            },
+                        });
                     }
                 });
         }

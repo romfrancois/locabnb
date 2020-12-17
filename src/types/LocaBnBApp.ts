@@ -13,4 +13,5 @@ export type LocaBnBApp = {
     document: Document;
     loadDataToState: Array<string>;
     status: State;
+    menuSelected: 'form' | 'table';
 };

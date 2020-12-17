@@ -1,9 +1,7 @@
-import React, { useReducer, useState } from 'react';
-import nanoid from 'nanoid';
+import React, { useEffect, useReducer } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFile, faSave, faTable } from '@fortawesome/free-solid-svg-icons';
-import { faWpforms } from '@fortawesome/free-brands-svg-icons';
+import { faFile, faSave } from '@fortawesome/free-solid-svg-icons';
 import PricesCard from './components/PricesCard';
 import DatesCard from './components/DatesCard';
 import InfoCard from './components/InfoCard';
@@ -17,10 +15,8 @@ import { Prices } from './types/Prices';
 import { Options } from './types/Options';
 import { Document } from './types/Document';
 import { State } from './types/State';
-import GoogleConnection from './components/google/GoogleConnection';
 import GoogleSheet from './components/google/GoogleSheet';
-
-import { useLocalStorage } from './hooks/useLocalStorage';
+import MenuComponent from './components/Menu';
 
 type Action =
     | { type: 'setConnected'; value: boolean }
@@ -33,7 +29,8 @@ type Action =
     | { type: 'setOptions'; value: Options }
     | { type: 'setDocument'; value: Document }
     | { type: 'resetToInitialState' }
-    | { type: 'loadDataToState'; value: Array<string> };
+    | { type: 'loadDataToState'; value: Array<string> }
+    | { type: 'setMenuSelected'; value: 'form' | 'table' };
 
 type contextProp = {
     dispatch: React.Dispatch<Action>;
@@ -50,6 +47,7 @@ const locabnbIS: LocaBnBApp = {
     document: {} as Document,
     loadDataToState: {} as Array<string>,
     status: {} as State,
+    menuSelected: 'form',
 };
 
 function locabnbReducer(state: LocaBnBApp, action: Action) {
@@ -126,6 +124,11 @@ function locabnbReducer(state: LocaBnBApp, action: Action) {
                     connected: state.status.connected,
                 },
             };
+        case 'setMenuSelected':
+            return {
+                ...state,
+                menuSelected: action.value,
+            };
         default:
             return state;
     }
@@ -133,10 +136,6 @@ function locabnbReducer(state: LocaBnBApp, action: Action) {
 
 const App = (): JSX.Element => {
     const [locaBnBAppState, dispatch] = useReducer(locabnbReducer, locabnbIS);
-
-    const [renterID, setRenterID] = useState(nanoid(10));
-
-    const [currentRenter, setCurrentRenter] = useLocalStorage('VYaWyI-NcL', '');
 
     const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
         e.persist();
@@ -149,19 +148,10 @@ const App = (): JSX.Element => {
 
         switch (name) {
             case 'resetData':
-                setCurrentRenter('');
                 dispatch({ type: 'resetToInitialState' });
                 break;
             case 'saveData':
-                console.log('Saving Data!: ', renterID, currentRenter, locaBnBAppState);
-
-                if (currentRenter) {
-                    console.log('update renter');
-                } else {
-                    console.log('creating renter');
-                }
-
-                setCurrentRenter(JSON.stringify(locaBnBAppState));
+                console.log('Saving Data!');
                 dispatch({
                     type: 'setState',
                     value: {
@@ -176,62 +166,20 @@ const App = (): JSX.Element => {
         }
     };
 
-    const handleMenu = (e: React.MouseEvent<HTMLButtonElement>): void => {
-        e.persist();
-
-        console.log('event: ', e);
-
-        const {
-            currentTarget: { name },
-        } = e;
-
-        const table = document.getElementById('table');
-        const form = document.getElementById('form');
-
-        switch (name) {
-            case 'setTable':
-                table?.classList.add('visible');
-                table?.classList.remove('invisible');
-                form?.classList.add('invisible');
-                form?.classList.remove('visible');
-                break;
-            case 'setForm':
-                table?.classList.add('invisible');
-                table?.classList.remove('visible');
-                form?.classList.add('visible');
-                form?.classList.remove('invisible');
-                break;
-            default:
-                break;
-        }
-    };
-
     return (
         <>
-            <div className="menu">
-                <button type="submit" name="setForm" onClick={handleMenu}>
-                    <FontAwesomeIcon className="faStyle fa-3x" icon={faWpforms} />
-                    <span>Formulaire</span>
-                </button>
-
-                <button type="submit" name="setTable" onClick={handleMenu}>
-                    <FontAwesomeIcon className="faStyle fa-3x" icon={faTable} />
-                    <span>Table</span>
-                </button>
-
-                <RenterContext.Provider value={{ state: locaBnBAppState, dispatch }}>
-                    <GoogleConnection />
-                </RenterContext.Provider>
-            </div>
+            <RenterContext.Provider value={{ state: locaBnBAppState, dispatch }}>
+                <MenuComponent />
+            </RenterContext.Provider>
 
             <div className="container">
-                <div id="table" className="invisible">
+                <div id="table" className={locaBnBAppState.menuSelected === 'table' ? 'visible' : 'invisible'}>
                     <RenterContext.Provider value={{ state: locaBnBAppState, dispatch }}>
                         <GoogleSheet />
                     </RenterContext.Provider>
                 </div>
 
-                <div id="form" className="form visible">
+                <div id="form" className={`form ${locaBnBAppState.menuSelected === 'table' ? 'invisible' : 'visible'}`}>
                     <RenterContext.Provider value={{ state: locaBnBAppState, dispatch }}>
                         <InfoCard />
                         <DatesCard />
@@ -243,10 +191,15 @@ const App = (): JSX.Element => {
                     <div className="menuButtons">
                         <button type="submit" name="resetData" onClick={handleOnClick}>
                             <FontAwesomeIcon className="faStyle fa-3x" icon={faFile} />
-                            <span>Nouvelle location</span>
+                            <span>Remettre à zéro le formualaire</span>
                         </button>
 
-                        <button type="submit" name="saveData" onClick={handleOnClick}>
+                        <button
+                            type="submit"
+                            name="saveData"
+                            onClick={handleOnClick}
+                            disabled={Object.keys(locaBnBAppState.info).length <= 0}
+                        >
                             <FontAwesomeIcon className="faStyle fa-3x" icon={faSave} />
                             <span>Enregistrer la location</span>
                         </button>

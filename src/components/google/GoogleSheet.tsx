@@ -146,10 +146,11 @@ const GoogleSheet = (): JSX.Element => {
 
     const [rawRenters, setRawRenters] = useState<Map<string, string[]>>();
 
-    useEffect(() => {
-        const SPREADSHEET_ID = '1he2PWi4NUP_5AuKYhXmLo2chy4lduqzP5XWgRHSnSH8'; // '1dKSCcTzZjuB3twn8C604Ibf8HPj5I0g7-4peFioNbEs';
-        const SPREADSHEET_NAME = 'Sheet1';
+    const SPREADSHEET_ID = '1he2PWi4NUP_5AuKYhXmLo2chy4lduqzP5XWgRHSnSH8'; // '1dKSCcTzZjuB3twn8C604Ibf8HPj5I0g7-4peFioNbEs';
+    const SPREADSHEET_NAME = 'Sheet1';
+    const SPREADSHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}`;
 
+    useEffect(() => {
         const SHEET_STARTING_POINT = 'A1'; // 1st col that defines fixed cols' names
         const SHEET_ENDING_POINT = 'U'; // Last col to consider in the spreadsheet
 
@@ -244,9 +245,6 @@ const GoogleSheet = (): JSX.Element => {
 
             console.log('data2Backup: ', data2Backup);
 
-            const SPREADSHEET_ID = '1he2PWi4NUP_5AuKYhXmLo2chy4lduqzP5XWgRHSnSH8'; // '1dKSCcTzZjuB3twn8C604Ibf8HPj5I0g7-4peFioNbEs';
-            const SPREADSHEET_NAME = 'Sheet1';
-
             const body = {
                 values: [data2Backup.flat()],
             };
@@ -298,7 +296,18 @@ const GoogleSheet = (): JSX.Element => {
         }
     }, [action, dates, dispatch, document, info, nextInsertionRow, options, prices, row]);
 
-    return <>{rawRenters && <div>{UserData({ data: rawRenters, dispatch })}</div>}</>;
+    return (
+        <>
+            {rawRenters && (
+                <u>
+                    <a href={SPREADSHEET_URL} target="_blank" rel="noopener noreferrer">
+                        Lien vers le fichier Excel
+                    </a>
+                    {UserData({ data: rawRenters, dispatch })}
+                </u>
+            )}
+        </>
+    );
 };
 
 export default GoogleSheet;

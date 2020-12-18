@@ -38,7 +38,7 @@ const initClient = (options: { globalOptions: any; updateLoggedInStatus: (status
 
 function LogInOutButton(options: { loggedIn: boolean; logIn: () => void; logOut: () => void }): JSX.Element {
     const { loggedIn, logIn, logOut } = options;
-    const buttonText = loggedIn ? 'Log out' : 'Log in';
+    const buttonText = loggedIn ? 'Déconnecter' : 'Connecter';
     const buttonAction = loggedIn ? logOut : logIn;
 
     const icon = loggedIn ? faSignOutAlt : faSignInAlt;

@@ -175,6 +175,8 @@ const App = (): JSX.Element => {
                         row: locaBnBAppState.status.row,
                     },
                 });
+
+                dispatch({ type: 'setGSheetConnected', value: false });
                 break;
             default:
                 break;

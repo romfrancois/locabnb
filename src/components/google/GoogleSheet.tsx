@@ -5,6 +5,8 @@ import { store } from 'react-notifications-component';
 
 import { RenterContext } from '../../App';
 
+let componentID = nanoid(10);
+
 type tableDataType = {
     row: string;
     id: string;
@@ -51,6 +53,13 @@ function UserData({ data, dispatch }: userDataProp) {
         });
     }
 
+    const headerStyle = {
+        color: 'grey',
+    };
+    const dataStyle = {
+        color: 'white',
+    };
+
     return (
         <Table
             data={dataForTable}
@@ -74,13 +83,13 @@ function UserData({ data, dispatch }: userDataProp) {
             // Custom no data string.
             limit={10}
             // No of rows to display at a time
-            // containerStyle={react-table-lite-container}
+            // containerStyle={}
             // Customize table container style
-            // headerStyle={}
+            headerStyle={headerStyle}
             // // Customize table header style
             // rowStyle={}
             // // Customize table row style
-            // dataStyle={}
+            dataStyle={dataStyle}
             // Customize table data cell style
             showActions
             // Enable Row Operation
@@ -89,9 +98,9 @@ function UserData({ data, dispatch }: userDataProp) {
             // Type of Row Operation (case insensitive)
             // enableMultiSelect
             // Enable Multi-select
-            defaultCheckedKey="selected"
+            // defaultCheckedKey="selected"
             // Key present in data to mark row checked
-            disableCheckedKey="selectDisabled"
+            // disableCheckedKey="selectDisabled"
             // Key present in data to make row checkbox disabled
             // onRowSelect={(args, event, row) => {
             //     // 'row' returns row object
@@ -118,6 +127,7 @@ function UserData({ data, dispatch }: userDataProp) {
                 if (data2dispatch) {
                     dispatch({ type: 'loadDataToState', value: data2dispatch });
                     dispatch({ type: 'setSelectedRenter', value: Number(event.row) + 2 });
+                    dispatch({ type: 'setMenuSelected', value: 'form' });
                 }
             }}
         />
@@ -179,6 +189,7 @@ const GoogleSheet = (): JSX.Element => {
                             tab.set(key, results);
                         });
 
+                        componentID = nanoid(10);
                         return setRawRenters(tab);
                     },
                     (response) => {
@@ -299,12 +310,12 @@ const GoogleSheet = (): JSX.Element => {
     return (
         <>
             {rawRenters && (
-                <u>
+                <div className="gsheetCard" key={`${componentID}`}>
                     <a href={SPREADSHEET_URL} target="_blank" rel="noopener noreferrer">
                         Lien vers le fichier Excel
                     </a>
                     {UserData({ data: rawRenters, dispatch })}
-                </u>
+                </div>
             )}
         </>
     );

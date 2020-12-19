@@ -107,118 +107,119 @@ const InfoCard = (): JSX.Element => {
     };
 
     return (
-        <>
-            <div className="infoCard" key={`${componentID}`}>
-                <header>
-                    <FontAwesomeIcon className="faStyle fa-3x" icon={faUsers} />
-                    <span>Info locataires</span>
-                </header>
-                <div className="info">
-                    <div className="renter">
-                        <input
-                            type="text"
-                            name="name"
-                            id="name"
-                            placeholder="Prénom"
-                            onChange={handleOnChange}
-                            defaultValue={infoCard?.name}
-                        />
-                        <input
-                            type="text"
-                            name="surname"
-                            id="surname"
-                            placeholder="Nom"
-                            onChange={handleOnChange}
-                            defaultValue={infoCard?.surname}
-                        />
-                    </div>
-                    <div className="people">
-                        <input
-                            type="text"
-                            name="people"
-                            id="people"
-                            placeholder="Nb de personnes"
-                            onChange={handleOnChange}
-                            defaultValue={infoCard?.nbPersones}
-                        />
-                        <input
-                            type="text"
-                            name="kids"
-                            id="kids"
-                            placeholder="Age des enfants"
-                            onChange={handleOnChange}
-                            defaultValue={infoCard?.kids}
-                        />
-                    </div>
-                </div>
-                <div className="address">
-                    <div className="main">
-                        <input
-                            type="text"
-                            name="address"
-                            id="address"
-                            placeholder="Adresse"
-                            className="addr"
-                            onChange={handleOnChange}
-                            defaultValue={infoCard?.address?.street}
-                        />
-                    </div>
-                    <div className="additional">
-                        <input
-                            type="text"
-                            name="postCode"
-                            id="postCode"
-                            placeholder="Code Postal"
-                            className="addr input-med"
-                            onChange={handleOnChange}
-                            defaultValue={infoCard?.address?.postCode}
-                        />
-                        <input
-                            type="text"
-                            name="city"
-                            id="city"
-                            placeholder="Ville"
-                            className="addr input-med"
-                            onChange={handleOnChange}
-                            defaultValue={infoCard?.address?.city}
-                        />
-                        <select
-                            id="country"
-                            name="country"
-                            placeholder="Pays"
-                            className="input-sm"
-                            onChange={handleOnChange}
-                            defaultValue={infoCard?.address?.country}
-                        >
-                            <option value="NONE">Pays</option>
-                            {Object.keys(Country).map((origin) => (
-                                <option key={origin} defaultValue={origin}>
-                                    {origin}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
-                <div className="contact">
+        <div className="infoCard" key={`${componentID}`}>
+            <header>
+                <FontAwesomeIcon className="faStyle fa-3x" icon={faUsers} />
+                <span>Info locataires</span>
+            </header>
+            <div className="info">
+                <div className="renter">
                     <input
-                        type="email"
-                        name="email"
-                        id="email"
-                        placeholder="Email"
+                        type="text"
+                        name="name"
+                        id="name"
+                        placeholder="Prénom"
+                        className="info-capitalised"
                         onChange={handleOnChange}
-                        defaultValue={infoCard?.contact?.email}
+                        defaultValue={infoCard?.name}
                     />
                     <input
-                        type="tel"
-                        name="tel"
-                        id="tel"
-                        placeholder="Téléphone"
+                        type="text"
+                        name="surname"
+                        id="surname"
+                        placeholder="Nom"
+                        className="info-capitalised"
                         onChange={handleOnChange}
-                        defaultValue={infoCard?.contact?.phone}
+                        defaultValue={infoCard?.surname}
+                    />
+                </div>
+                <div className="people">
+                    <input
+                        type="text"
+                        name="people"
+                        id="people"
+                        placeholder="Nb de personnes"
+                        onChange={handleOnChange}
+                        defaultValue={infoCard?.nbPersones}
+                    />
+                    <input
+                        type="text"
+                        name="kids"
+                        id="kids"
+                        placeholder="Age des enfants"
+                        onChange={handleOnChange}
+                        defaultValue={infoCard?.kids}
                     />
                 </div>
             </div>
-        </>
+            <div className="address">
+                <div className="main">
+                    <input
+                        type="text"
+                        name="address"
+                        id="address"
+                        placeholder="Adresse"
+                        className="info-capitalised"
+                        onChange={handleOnChange}
+                        defaultValue={infoCard?.address?.street}
+                    />
+                </div>
+                <div className="additional">
+                    <input
+                        type="text"
+                        name="postCode"
+                        id="postCode"
+                        placeholder="Code Postal"
+                        className="info-uppercase input-med"
+                        onChange={handleOnChange}
+                        defaultValue={infoCard?.address?.postCode}
+                    />
+                    <input
+                        type="text"
+                        name="city"
+                        id="city"
+                        placeholder="Ville"
+                        className="info-capitalised input-med"
+                        onChange={handleOnChange}
+                        defaultValue={infoCard?.address?.city}
+                    />
+                    <select
+                        id="country"
+                        name="country"
+                        placeholder="Pays"
+                        className="input-sm"
+                        onChange={handleOnChange}
+                        defaultValue={infoCard?.address?.country}
+                    >
+                        <option value="NONE">Pays</option>
+                        {Object.keys(Country).map((origin) => (
+                            <option key={origin} defaultValue={origin}>
+                                {origin}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+            <div className="contact">
+                <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="Email"
+                    className="info-lowercase"
+                    onChange={handleOnChange}
+                    defaultValue={infoCard?.contact?.email}
+                />
+                <input
+                    type="tel"
+                    name="tel"
+                    id="tel"
+                    placeholder="Téléphone"
+                    onChange={handleOnChange}
+                    defaultValue={infoCard?.contact?.phone}
+                />
+            </div>
+        </div>
     );
 };
 

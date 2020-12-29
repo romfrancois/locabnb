@@ -13,7 +13,7 @@ ReactDOM.render(
     <React.StrictMode>
         <img
             id="background"
-            src="https://images.unsplash.com/photo-1590123034471-762117155a0b?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=3300&q=80"
+            src="https://images.unsplash.com/photo-1586446911746-3038e9751ac9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80"
             alt="background"
         />
         <ReactNotification />

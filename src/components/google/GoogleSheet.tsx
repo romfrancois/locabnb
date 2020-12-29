@@ -20,18 +20,18 @@ type tableDataType = {
     selectDisabled: true;
 };
 
-const mapRowData2JSONObject = (renter: Array<string>): tableDataType => {
+const mapRowData2JSONObject = (renters: Array<string>): tableDataType => {
     // console.log('mapRowData2JSONObject: ', renters);
 
     return {
-        row: renter[0],
-        id: renter[1],
-        name: renter[2],
-        surname: renter[3],
-        city: renter[4],
-        start: renter[12],
-        end: renter[13],
-        price: renter[14],
+        row: renters[0],
+        id: renters[1],
+        name: renters[2],
+        surname: renters[3],
+        city: renters[6],
+        start: renters[12],
+        end: renters[13],
+        price: renters[14],
         selected: false,
         selectDisabled: true,
     };
@@ -81,7 +81,7 @@ function UserData({ data, dispatch }: userDataProp) {
             // Default name of downloaded csv file
             noDataMessage="Aucune données chargées!"
             // Custom no data string.
-            limit={10}
+            limit={20}
             // No of rows to display at a time
             // containerStyle={}
             // Customize table container style
@@ -222,9 +222,9 @@ const GoogleSheet = (): JSX.Element => {
     useEffect(() => {
         console.log('rawRenters: ', rawRenters?.size);
 
-        if (rawRenters && rawRenters.size > 0) {
-            dispatch({ type: 'setNbRenters', value: rawRenters.size });
-        }
+        // if (rawRenters && rawRenters.size > 0) {
+        dispatch({ type: 'setNbRenters', value: rawRenters?.size || 0 });
+        // }
     }, [dispatch, rawRenters]);
 
     useEffect(() => {

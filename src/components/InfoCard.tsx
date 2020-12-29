@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 
 import nanoid from 'nanoid';
+import { capitalize, startCase, toLower, toUpper } from 'lodash';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
@@ -17,7 +18,7 @@ let componentID = nanoid(10);
 const infoCardIS: Info = {
     name: '',
     surname: '',
-    nbPersones: '',
+    nbPersonnes: '',
     kids: '',
     address: {} as Address,
     contact: {} as Contact,
@@ -45,7 +46,7 @@ const InfoCard = (): JSX.Element => {
             updatedData = {
                 name: loadDataToState[2],
                 surname: loadDataToState[3],
-                nbPersones: loadDataToState[4],
+                nbPersonnes: loadDataToState[4],
                 kids: loadDataToState[5],
                 address: {
                     street: loadDataToState[6],
@@ -72,31 +73,31 @@ const InfoCard = (): JSX.Element => {
         const { name, value } = e.target;
         switch (name) {
             case 'name':
-                setInfoCard({ ...infoCard, name: value });
+                setInfoCard({ ...infoCard, name: capitalize(value) });
                 break;
             case 'surname':
-                setInfoCard({ ...infoCard, surname: value });
+                setInfoCard({ ...infoCard, surname: capitalize(value) });
                 break;
             case 'people':
-                setInfoCard({ ...infoCard, nbPersones: value });
+                setInfoCard({ ...infoCard, nbPersonnes: value });
                 break;
             case 'kids':
                 setInfoCard({ ...infoCard, kids: value });
                 break;
             case 'address':
-                setInfoCard({ ...infoCard, address: { ...infoCard.address, street: value } });
+                setInfoCard({ ...infoCard, address: { ...infoCard.address, street: startCase(value) } });
                 break;
             case 'postCode':
-                setInfoCard({ ...infoCard, address: { ...infoCard.address, postCode: value } });
+                setInfoCard({ ...infoCard, address: { ...infoCard.address, postCode: toUpper(value) } });
                 break;
             case 'city':
-                setInfoCard({ ...infoCard, address: { ...infoCard.address, city: value } });
+                setInfoCard({ ...infoCard, address: { ...infoCard.address, city: startCase(value) } });
                 break;
             case 'country':
                 setInfoCard({ ...infoCard, address: { ...infoCard.address, country: value as Country } });
                 break;
             case 'email':
-                setInfoCard({ ...infoCard, contact: { ...infoCard.contact, email: value } });
+                setInfoCard({ ...infoCard, contact: { ...infoCard.contact, email: toLower(value) } });
                 break;
             case 'tel':
                 setInfoCard({ ...infoCard, contact: { ...infoCard.contact, phone: value } });
@@ -135,12 +136,12 @@ const InfoCard = (): JSX.Element => {
                 </div>
                 <div className="people">
                     <input
-                        type="text"
+                        type="number"
                         name="people"
                         id="people"
                         placeholder="Nb de personnes"
                         onChange={handleOnChange}
-                        defaultValue={infoCard?.nbPersones}
+                        defaultValue={infoCard?.nbPersonnes}
                     />
                     <input
                         type="text"

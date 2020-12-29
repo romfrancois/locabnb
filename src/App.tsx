@@ -133,6 +133,7 @@ function locabnbReducer(state: LocaBnBApp, action: Action) {
         case 'resetToInitialState':
             return {
                 ...locabnbIS,
+                loadDataToState: {} as Array<string>,
                 status: {
                     ...locabnbIS.status,
                     nextInsertionRow: state.status.nextInsertionRow,

@@ -29,9 +29,12 @@ const DatesCard = (): JSX.Element => {
         let updatedData = {} as Dates;
 
         if (loadDataToState.length > 0) {
+            const start = loadDataToState[12].split(/\/|\s/);
+            const end = loadDataToState[13].split(/\/|\s/);
+
             updatedData = {
-                start: loadDataToState[12],
-                end: loadDataToState[13],
+                start: `${start.slice(0, 3).reverse().join('-')}T${start[3]?.slice(0, 5) || '12:00'}`,
+                end: `${end.slice(0, 3).reverse().join('-')}T${end[3]?.slice(0, 5) || '12:00'}`,
             };
         }
 

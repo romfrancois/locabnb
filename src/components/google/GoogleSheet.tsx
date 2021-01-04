@@ -1,9 +1,23 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
 import React, { useContext, useEffect, useState } from 'react';
 import Table from 'react-table-lite';
 import nanoid from 'nanoid';
 import { store } from 'react-notifications-component';
 
 import { RenterContext } from '../../App';
+import { infoCardIS } from '../InfoCard';
+import { Info } from '../../types/Info';
+import { datesCardIS } from '../DatesCard';
+import { documentCardIS } from '../DocumentCard';
+import { optionsCardIS } from '../OptionsCard';
+import { pricesCardIS } from '../PricesCard';
+import { Dates } from '../../types/Dates';
+import { Options } from '../../types/Options';
+import { Prices } from '../../types/Prices';
+import { Document } from '../../types/Document';
+import { Contact } from '../../types/Contact';
+import { Address } from '../../types/Address';
 
 let componentID = nanoid(10);
 
@@ -227,33 +241,55 @@ const GoogleSheet = (): JSX.Element => {
         // }
     }, [dispatch, rawRenters]);
 
+    type AllCardsIS = Info | Address | Contact | Dates | Prices | Options | Document;
+    type AllCards = Info | Dates | Prices | Options | Document;
+
     useEffect(() => {
-        const parseData = (card: any, data2Backup: Array<any>) => {
-            Object.values(card).forEach((field) => {
-                if (field && typeof field === 'object') {
-                    Object.values(field)
-                        .map((data) => data)
-                        .forEach((data) => data2Backup.push(data));
+        const parseCard = (cardIS: AllCardsIS, card: AllCards, subProp?: string): Array<string> => {
+            const getKeyValue = (key: string) => (obj: Record<string, any>) => obj[key];
+
+            const dataInit: Array<string | Array<string>> = [];
+            for (const property in cardIS) {
+                if (property === 'address') {
+                    dataInit.push(parseCard(infoCardIS.address, card, property));
+                } else if (property === 'contact') {
+                    dataInit.push(parseCard(infoCardIS.contact, card, property));
+                } else if (subProp) {
+                    if (Object.prototype.hasOwnProperty.call(card, subProp)) {
+                        const subPropValue = getKeyValue(subProp)(card)[property];
+                        if (subPropValue) {
+                            dataInit.push(subPropValue);
+                        } else {
+                            dataInit.push('');
+                        }
+                    } else {
+                        dataInit.push('');
+                    }
+                } else if (Object.prototype.hasOwnProperty.call(card, property)) {
+                    const currentData = getKeyValue(property)(card);
+                    dataInit.push(currentData);
+                } else {
+                    dataInit.push('');
                 }
-                if ((field && typeof field === 'string') || typeof field === 'number') {
-                    data2Backup.push(field);
-                }
-            });
+            }
+
+            return dataInit.flat();
+        };
+
+        const parseAllCards = (): Array<string> => {
+            let data2Backup: Array<string> = [nanoid(10)];
+
+            data2Backup = data2Backup.concat(parseCard(infoCardIS, info));
+            data2Backup = data2Backup.concat(parseCard(datesCardIS, dates));
+            data2Backup = data2Backup.concat(parseCard(pricesCardIS, prices));
+            data2Backup = data2Backup.concat(parseCard(optionsCardIS, options));
+            data2Backup = data2Backup.concat(parseCard(documentCardIS, document));
 
             return data2Backup;
         };
 
         if (action === 'save') {
-            console.log('saving data to sheet');
-
-            const data2Backup: Array<any> = [nanoid(10)];
-
-            parseData(info, data2Backup);
-            parseData(dates, data2Backup);
-            parseData(prices, data2Backup);
-            parseData(options, data2Backup);
-            parseData(document, data2Backup);
-
+            const data2Backup: Array<string> = parseAllCards();
             console.log('data2Backup: ', data2Backup);
 
             const body = {
@@ -273,7 +309,7 @@ const GoogleSheet = (): JSX.Element => {
                     console.log('response: ', response);
 
                     if (response.status === 200) {
-                        dispatch({ type: 'setState', value: { action: 'updated' } });
+                        dispatch({ type: 'setState', value: { action: 'updated', row } });
 
                         store.addNotification({
                             title: 'Location enregistrée',

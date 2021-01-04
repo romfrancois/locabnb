@@ -10,6 +10,12 @@ import { Prices } from '../types/Prices';
 
 let componentID = nanoid(10);
 
+export const pricesCardIS: Prices = {
+    price: 0,
+    arrhes: 0,
+    garantie: 0,
+};
+
 const PricesCard = (): JSX.Element => {
     console.log('PricesCard');
     const { dispatch } = useContext(RenterContext);
@@ -23,7 +29,7 @@ const PricesCard = (): JSX.Element => {
     } = useContext(RenterContext);
 
     const sizeOfPrices = Object.keys(prices).length;
-    const [pricesCard, setPricesCard] = useState(sizeOfPrices !== 0 ? prices : ({} as Prices));
+    const [pricesCard, setPricesCard] = useState(sizeOfPrices !== 0 ? prices : pricesCardIS);
 
     useEffect(() => {
         let updatedData = {} as Prices;

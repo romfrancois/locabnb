@@ -21,7 +21,14 @@ import MenuComponent from './components/Menu';
 type Action =
     | { type: 'setGoogleConnected'; value: boolean }
     | { type: 'setGSheetConnected'; value: boolean }
-    | { type: 'setState'; value: { action: 'save' | 'updated'; row?: number; nextInsertionRow?: number } }
+    | {
+          type: 'setState';
+          value: {
+              action: 'save' | 'updated';
+              row?: number;
+              nextInsertionRow?: number;
+          };
+      }
     | { type: 'setNbRenters'; value: number }
     | { type: 'setSelectedRenter'; value: number }
     | { type: 'setInfo'; value: Info }

@@ -15,13 +15,25 @@ import { Country } from '../types/Country';
 
 let componentID = nanoid(10);
 
-const infoCardIS: Info = {
+const address: Address = {
+    street: '',
+    postCode: '',
+    city: '',
+    country: '' as Country,
+};
+
+const contact: Contact = {
+    email: '',
+    phone: '',
+};
+
+export const infoCardIS: Info = {
     name: '',
     surname: '',
     nbPersonnes: '',
     kids: '',
-    address: {} as Address,
-    contact: {} as Contact,
+    address,
+    contact,
 };
 
 const InfoCard = (): JSX.Element => {

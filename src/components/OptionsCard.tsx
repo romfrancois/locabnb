@@ -10,6 +10,11 @@ import { Options } from '../types/Options';
 
 let componentID = nanoid(10);
 
+export const optionsCardIS: Options = {
+    cleaning: 0,
+    sheets: 0,
+};
+
 const OptionsCard = (): JSX.Element => {
     console.log('OptionsCard');
     const { dispatch } = useContext(RenterContext);
@@ -23,7 +28,7 @@ const OptionsCard = (): JSX.Element => {
     } = useContext(RenterContext);
 
     const sizeOfOptions = Object.keys(options).length;
-    const [optionsCard, setOptionsCard] = useState(sizeOfOptions !== 0 ? options : ({} as Options));
+    const [optionsCard, setOptionsCard] = useState(sizeOfOptions !== 0 ? options : optionsCardIS);
 
     useEffect(() => {
         let updatedData = {} as Options;

@@ -10,7 +10,7 @@ import { Document, Languages, Locations, Origins } from '../types/Document';
 
 let componentID = nanoid(10);
 
-const documentCardIS: Document = {
+export const documentCardIS: Document = {
     language: Languages.FR,
     location: Locations.BELLEGARDE,
     origin: Origins.AIRBNB,

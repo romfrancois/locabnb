@@ -10,6 +10,11 @@ import { Dates } from '../types/Dates';
 
 let componentID = nanoid(10);
 
+export const datesCardIS: Dates = {
+    start: '',
+    end: '',
+};
+
 const DatesCard = (): JSX.Element => {
     console.log('DatesCard');
     const { dispatch } = useContext(RenterContext);
@@ -23,7 +28,7 @@ const DatesCard = (): JSX.Element => {
     } = useContext(RenterContext);
 
     const sizeOfDates = Object.keys(dates).length;
-    const [datesCard, setDatesCard] = useState(sizeOfDates !== 0 ? dates : ({} as Dates));
+    const [datesCard, setDatesCard] = useState(sizeOfDates !== 0 ? dates : datesCardIS);
 
     useEffect(() => {
         let updatedData = {} as Dates;

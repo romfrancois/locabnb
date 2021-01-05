@@ -51,20 +51,23 @@ const DatesCard = (): JSX.Element => {
         dispatch({ type: 'setDates', value: datesCard });
     }, [dispatch, datesCard]);
 
-    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
-        const { name, value } = e.target;
+    const handleOnBlur = React.useCallback(
+        (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
+            const { name, value } = e.target;
 
-        switch (name) {
-            case 'start':
-                setDatesCard({ ...datesCard, start: value });
-                break;
-            case 'end':
-                setDatesCard({ ...datesCard, end: value });
-                break;
-            default:
-                break;
-        }
-    };
+            switch (name) {
+                case 'start':
+                    setDatesCard({ ...datesCard, start: value });
+                    break;
+                case 'end':
+                    setDatesCard({ ...datesCard, end: value });
+                    break;
+                default:
+                    break;
+            }
+        },
+        [datesCard],
+    );
 
     return (
         <>
@@ -81,7 +84,7 @@ const DatesCard = (): JSX.Element => {
                                 type="datetime-local"
                                 name="start"
                                 id="start"
-                                onChange={handleOnChange}
+                                onBlur={handleOnBlur}
                                 defaultValue={datesCard?.start}
                             />
                         </div>
@@ -91,7 +94,7 @@ const DatesCard = (): JSX.Element => {
                                 type="datetime-local"
                                 name="end"
                                 id="end"
-                                onChange={handleOnChange}
+                                onBlur={handleOnBlur}
                                 defaultValue={datesCard?.end}
                             />
                         </div>

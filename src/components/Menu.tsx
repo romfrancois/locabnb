@@ -26,24 +26,27 @@ const MenuComponent = (): JSX.Element => {
     } = useContext(RenterContext);
     const { googleState } = status;
 
-    const handleMenu = (e: React.MouseEvent<HTMLButtonElement>): void => {
-        e.persist();
+    const handleMenu = React.useCallback(
+        (e: React.MouseEvent<HTMLButtonElement>): void => {
+            e.persist();
 
-        const {
-            currentTarget: { name },
-        } = e;
+            const {
+                currentTarget: { name },
+            } = e;
 
-        switch (name) {
-            case 'setTable':
-                dispatch({ type: 'setMenuSelected', value: 'table' });
-                break;
-            case 'setForm':
-                dispatch({ type: 'setMenuSelected', value: 'form' });
-                break;
-            default:
-                break;
-        }
-    };
+            switch (name) {
+                case 'setTable':
+                    dispatch({ type: 'setMenuSelected', value: 'table' });
+                    break;
+                case 'setForm':
+                    dispatch({ type: 'setMenuSelected', value: 'form' });
+                    break;
+                default:
+                    break;
+            }
+        },
+        [dispatch],
+    );
 
     return (
         <>

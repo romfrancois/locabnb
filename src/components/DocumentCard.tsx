@@ -17,15 +17,15 @@ export const documentCardIS: Document = {
 };
 
 type subComponentProp = {
-    onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
+    onBlur: (event: ChangeEvent<HTMLSelectElement>) => void;
     initialValue: Languages | Locations | Origins;
 };
 
-const LanguagesComponent = ({ onChange, initialValue }: subComponentProp) => {
+const LanguagesComponent = ({ onBlur, initialValue }: subComponentProp) => {
     return (
         <div className="language">
             <span>Langue du contrat</span>
-            <select id="language" name="language" className="input-sm" onChange={onChange} defaultValue={initialValue}>
+            <select id="language" name="language" className="input-sm" onBlur={onBlur} defaultValue={initialValue}>
                 {Object.keys(Languages).map((language) => (
                     <option key={language} defaultValue={initialValue}>
                         {language}
@@ -36,11 +36,11 @@ const LanguagesComponent = ({ onChange, initialValue }: subComponentProp) => {
     );
 };
 
-const LocationsComponent = ({ onChange, initialValue }: subComponentProp) => {
+const LocationsComponent = ({ onBlur, initialValue }: subComponentProp) => {
     return (
         <div className="location">
             <span>Endroit de la location</span>
-            <select id="location" name="location" className="input-sm" onChange={onChange} defaultValue={initialValue}>
+            <select id="location" name="location" className="input-sm" onBlur={onBlur} defaultValue={initialValue}>
                 {Object.keys(Locations).map((location) => (
                     <option key={location} value={location}>
                         {location}
@@ -50,11 +50,11 @@ const LocationsComponent = ({ onChange, initialValue }: subComponentProp) => {
         </div>
     );
 };
-const OriginsComponent = ({ onChange, initialValue }: subComponentProp) => {
+const OriginsComponent = ({ onBlur, initialValue }: subComponentProp) => {
     return (
         <div className="origin">
             <span>Site de la résa</span>
-            <select id="origin" name="origin" className="input-sm" onChange={onChange} defaultValue={initialValue}>
+            <select id="origin" name="origin" className="input-sm" onBlur={onBlur} defaultValue={initialValue}>
                 {Object.keys(Origins).map((origin) => (
                     <option key={origin} value={origin}>
                         {origin}
@@ -79,23 +79,26 @@ const DocumentCard = (): JSX.Element => {
     const sizeOfDocument = Object.keys(document).length;
     const [documentCard, setDocumentCard] = useState(sizeOfDocument !== 0 ? document : documentCardIS);
 
-    const handleOnChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-        const { name, value } = e.target;
+    const handleOnBlur = React.useCallback(
+        (e: React.ChangeEvent<HTMLSelectElement>): void => {
+            const { name, value } = e.target;
 
-        switch (name) {
-            case 'language':
-                setDocumentCard({ ...documentCard, language: value as Languages });
-                break;
-            case 'location':
-                setDocumentCard({ ...documentCard, location: value as Locations });
-                break;
-            case 'origin':
-                setDocumentCard({ ...documentCard, origin: value as Origins });
-                break;
-            default:
-                break;
-        }
-    };
+            switch (name) {
+                case 'language':
+                    setDocumentCard({ ...documentCard, language: value as Languages });
+                    break;
+                case 'location':
+                    setDocumentCard({ ...documentCard, location: value as Locations });
+                    break;
+                case 'origin':
+                    setDocumentCard({ ...documentCard, origin: value as Origins });
+                    break;
+                default:
+                    break;
+            }
+        },
+        [documentCard],
+    );
 
     useEffect(() => {
         let updatedData = documentCardIS;
@@ -124,9 +127,9 @@ const DocumentCard = (): JSX.Element => {
                     <span>Document</span>
                 </header>
                 <div className="document">
-                    <LanguagesComponent onChange={handleOnChange} initialValue={documentCard.language} />
-                    <LocationsComponent onChange={handleOnChange} initialValue={documentCard.location} />
-                    <OriginsComponent onChange={handleOnChange} initialValue={documentCard.origin} />
+                    <LanguagesComponent onBlur={handleOnBlur} initialValue={documentCard.language} />
+                    <LocationsComponent onBlur={handleOnBlur} initialValue={documentCard.location} />
+                    <OriginsComponent onBlur={handleOnBlur} initialValue={documentCard.origin} />
                 </div>
             </div>
         </>

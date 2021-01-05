@@ -52,20 +52,23 @@ const OptionsCard = (): JSX.Element => {
         dispatch({ type: 'setOptions', value: optionsCard });
     }, [dispatch, optionsCard]);
 
-    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
-        const { name, value } = e.target;
+    const handleOnBlur = React.useCallback(
+        (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
+            const { name, value } = e.target;
 
-        switch (name) {
-            case 'cleaning':
-                setOptionsCard({ ...optionsCard, cleaning: Number(value) });
-                break;
-            case 'sheets':
-                setOptionsCard({ ...optionsCard, sheets: Number(value) });
-                break;
-            default:
-                break;
-        }
-    };
+            switch (name) {
+                case 'cleaning':
+                    setOptionsCard({ ...optionsCard, cleaning: Number(value) });
+                    break;
+                case 'sheets':
+                    setOptionsCard({ ...optionsCard, sheets: Number(value) });
+                    break;
+                default:
+                    break;
+            }
+        },
+        [optionsCard],
+    );
 
     return (
         <>
@@ -83,7 +86,7 @@ const OptionsCard = (): JSX.Element => {
                             id="cleaning"
                             placeholder="Ménage"
                             className="input-med"
-                            onChange={handleOnChange}
+                            onBlur={handleOnBlur}
                             defaultValue={optionsCard.cleaning === 0 ? 'Ménage' : optionsCard.cleaning}
                         />
                     </div>
@@ -97,7 +100,7 @@ const OptionsCard = (): JSX.Element => {
                             id="sheets"
                             placeholder="Draps & Linges de bain"
                             className="input-med"
-                            onChange={handleOnChange}
+                            onBlur={handleOnBlur}
                             defaultValue={optionsCard?.sheets === 0 ? 'Draps & Linges de bain' : optionsCard.sheets}
                         />
                     </div>

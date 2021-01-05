@@ -54,23 +54,26 @@ const PricesCard = (): JSX.Element => {
         dispatch({ type: 'setPrices', value: pricesCard });
     }, [dispatch, pricesCard]);
 
-    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
-        const { name, value } = e.target;
+    const handleOnBlur = React.useCallback(
+        (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
+            const { name, value } = e.target;
 
-        switch (name) {
-            case 'price':
-                setPricesCard({ ...pricesCard, price: Number(value) });
-                break;
-            case 'arrhes':
-                setPricesCard({ ...pricesCard, arrhes: Number(value) });
-                break;
-            case 'garantie':
-                setPricesCard({ ...pricesCard, garantie: Number(value) });
-                break;
-            default:
-                break;
-        }
-    };
+            switch (name) {
+                case 'price':
+                    setPricesCard({ ...pricesCard, price: Number(value) });
+                    break;
+                case 'arrhes':
+                    setPricesCard({ ...pricesCard, arrhes: Number(value) });
+                    break;
+                case 'garantie':
+                    setPricesCard({ ...pricesCard, garantie: Number(value) });
+                    break;
+                default:
+                    break;
+            }
+        },
+        [pricesCard],
+    );
 
     return (
         <>
@@ -88,7 +91,7 @@ const PricesCard = (): JSX.Element => {
                             id="price"
                             placeholder="Prix"
                             className="input-med"
-                            onChange={handleOnChange}
+                            onBlur={handleOnBlur}
                             defaultValue={pricesCard?.price === 0 ? 'Prix' : pricesCard.price}
                         />
                     </div>
@@ -100,7 +103,7 @@ const PricesCard = (): JSX.Element => {
                             id="arrhes"
                             placeholder="Arrhes"
                             className="input-med"
-                            onChange={handleOnChange}
+                            onBlur={handleOnBlur}
                             defaultValue={pricesCard?.arrhes === 0 ? 'Arrhes' : pricesCard.arrhes}
                         />
                     </div>
@@ -114,7 +117,7 @@ const PricesCard = (): JSX.Element => {
                             id="garantie"
                             placeholder="Garantie"
                             className="input-med"
-                            onChange={handleOnChange}
+                            onBlur={handleOnBlur}
                             defaultValue={pricesCard?.garantie === 0 ? 'Garantie' : pricesCard.garantie}
                         />
                     </div>

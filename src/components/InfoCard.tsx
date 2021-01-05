@@ -81,43 +81,46 @@ const InfoCard = (): JSX.Element => {
         dispatch({ type: 'setInfo', value: infoCard });
     }, [dispatch, infoCard]);
 
-    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
-        const { name, value } = e.target;
-        switch (name) {
-            case 'name':
-                setInfoCard({ ...infoCard, name: capitalize(value) });
-                break;
-            case 'surname':
-                setInfoCard({ ...infoCard, surname: capitalize(value) });
-                break;
-            case 'people':
-                setInfoCard({ ...infoCard, nbPersonnes: value });
-                break;
-            case 'kids':
-                setInfoCard({ ...infoCard, kids: value });
-                break;
-            case 'address':
-                setInfoCard({ ...infoCard, address: { ...infoCard.address, street: startCase(value) } });
-                break;
-            case 'postCode':
-                setInfoCard({ ...infoCard, address: { ...infoCard.address, postCode: toUpper(value) } });
-                break;
-            case 'city':
-                setInfoCard({ ...infoCard, address: { ...infoCard.address, city: startCase(value) } });
-                break;
-            case 'country':
-                setInfoCard({ ...infoCard, address: { ...infoCard.address, country: value as Country } });
-                break;
-            case 'email':
-                setInfoCard({ ...infoCard, contact: { ...infoCard.contact, email: toLower(value) } });
-                break;
-            case 'tel':
-                setInfoCard({ ...infoCard, contact: { ...infoCard.contact, phone: value } });
-                break;
-            default:
-                break;
-        }
-    };
+    const handleOnBlur = React.useCallback(
+        (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
+            const { name, value } = e.target;
+            switch (name) {
+                case 'name':
+                    setInfoCard({ ...infoCard, name: capitalize(value) });
+                    break;
+                case 'surname':
+                    setInfoCard({ ...infoCard, surname: capitalize(value) });
+                    break;
+                case 'people':
+                    setInfoCard({ ...infoCard, nbPersonnes: value });
+                    break;
+                case 'kids':
+                    setInfoCard({ ...infoCard, kids: value });
+                    break;
+                case 'address':
+                    setInfoCard({ ...infoCard, address: { ...infoCard.address, street: startCase(value) } });
+                    break;
+                case 'postCode':
+                    setInfoCard({ ...infoCard, address: { ...infoCard.address, postCode: toUpper(value) } });
+                    break;
+                case 'city':
+                    setInfoCard({ ...infoCard, address: { ...infoCard.address, city: startCase(value) } });
+                    break;
+                case 'country':
+                    setInfoCard({ ...infoCard, address: { ...infoCard.address, country: value as Country } });
+                    break;
+                case 'email':
+                    setInfoCard({ ...infoCard, contact: { ...infoCard.contact, email: toLower(value) } });
+                    break;
+                case 'tel':
+                    setInfoCard({ ...infoCard, contact: { ...infoCard.contact, phone: value } });
+                    break;
+                default:
+                    break;
+            }
+        },
+        [infoCard],
+    );
 
     return (
         <div className="infoCard" key={`${componentID}`}>
@@ -133,7 +136,7 @@ const InfoCard = (): JSX.Element => {
                         id="name"
                         placeholder="Prénom"
                         className="info-capitalised"
-                        onChange={handleOnChange}
+                        onBlur={handleOnBlur}
                         defaultValue={infoCard?.name}
                     />
                     <input
@@ -142,7 +145,7 @@ const InfoCard = (): JSX.Element => {
                         id="surname"
                         placeholder="Nom"
                         className="info-capitalised"
-                        onChange={handleOnChange}
+                        onBlur={handleOnBlur}
                         defaultValue={infoCard?.surname}
                     />
                 </div>
@@ -152,7 +155,7 @@ const InfoCard = (): JSX.Element => {
                         name="people"
                         id="people"
                         placeholder="Nb de personnes"
-                        onChange={handleOnChange}
+                        onBlur={handleOnBlur}
                         defaultValue={infoCard?.nbPersonnes}
                     />
                     <input
@@ -160,7 +163,7 @@ const InfoCard = (): JSX.Element => {
                         name="kids"
                         id="kids"
                         placeholder="Age des enfants"
-                        onChange={handleOnChange}
+                        onBlur={handleOnBlur}
                         defaultValue={infoCard?.kids}
                     />
                 </div>
@@ -173,7 +176,7 @@ const InfoCard = (): JSX.Element => {
                         id="address"
                         placeholder="Adresse"
                         className="info-capitalised"
-                        onChange={handleOnChange}
+                        onBlur={handleOnBlur}
                         defaultValue={infoCard?.address?.street}
                     />
                 </div>
@@ -184,7 +187,7 @@ const InfoCard = (): JSX.Element => {
                         id="postCode"
                         placeholder="Code Postal"
                         className="info-uppercase input-med"
-                        onChange={handleOnChange}
+                        onBlur={handleOnBlur}
                         defaultValue={infoCard?.address?.postCode}
                     />
                     <input
@@ -193,7 +196,7 @@ const InfoCard = (): JSX.Element => {
                         id="city"
                         placeholder="Ville"
                         className="info-capitalised input-med"
-                        onChange={handleOnChange}
+                        onBlur={handleOnBlur}
                         defaultValue={infoCard?.address?.city}
                     />
                     <select
@@ -201,7 +204,7 @@ const InfoCard = (): JSX.Element => {
                         name="country"
                         placeholder="Pays"
                         className="input-sm"
-                        onChange={handleOnChange}
+                        onBlur={handleOnBlur}
                         defaultValue={infoCard?.address?.country}
                     >
                         <option value="NONE">Pays</option>
@@ -220,7 +223,7 @@ const InfoCard = (): JSX.Element => {
                     id="email"
                     placeholder="Email"
                     className="info-lowercase"
-                    onChange={handleOnChange}
+                    onBlur={handleOnBlur}
                     defaultValue={infoCard?.contact?.email}
                 />
                 <input
@@ -228,7 +231,7 @@ const InfoCard = (): JSX.Element => {
                     name="tel"
                     id="tel"
                     placeholder="Téléphone"
-                    onChange={handleOnChange}
+                    onBlur={handleOnBlur}
                     defaultValue={infoCard?.contact?.phone}
                 />
             </div>

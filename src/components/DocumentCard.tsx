@@ -16,48 +16,22 @@ export const documentCardIS: Document = {
     origin: Origins.AIRBNB,
 };
 
-type subComponentProp = {
+type componentProp = {
+    title: string;
+    propType: typeof Languages | typeof Locations | typeof Origins;
+    name: string;
     onBlur: (event: ChangeEvent<HTMLSelectElement>) => void;
-    initialValue: Languages | Locations | Origins;
+    initialValue: string;
 };
 
-const LanguagesComponent = ({ onBlur, initialValue }: subComponentProp) => {
+const DocumentComponent = ({ title, propType, name, onBlur, initialValue }: componentProp) => {
     return (
-        <div className="language">
-            <span>Langue du contrat</span>
-            <select id="language" name="language" className="input-sm" onBlur={onBlur} defaultValue={initialValue}>
-                {Object.keys(Languages).map((language) => (
-                    <option key={language} defaultValue={initialValue}>
-                        {language}
-                    </option>
-                ))}
-            </select>
-        </div>
-    );
-};
-
-const LocationsComponent = ({ onBlur, initialValue }: subComponentProp) => {
-    return (
-        <div className="location">
-            <span>Endroit de la location</span>
-            <select id="location" name="location" className="input-sm" onBlur={onBlur} defaultValue={initialValue}>
-                {Object.keys(Locations).map((location) => (
-                    <option key={location} value={location}>
-                        {location}
-                    </option>
-                ))}
-            </select>
-        </div>
-    );
-};
-const OriginsComponent = ({ onBlur, initialValue }: subComponentProp) => {
-    return (
-        <div className="origin">
-            <span>Site de la résa</span>
-            <select id="origin" name="origin" className="input-sm" onBlur={onBlur} defaultValue={initialValue}>
-                {Object.keys(Origins).map((origin) => (
-                    <option key={origin} value={origin}>
-                        {origin}
+        <div className={name}>
+            <span>{title}</span>
+            <select id={name} name={name} className="input-sm" onBlur={onBlur} defaultValue={initialValue}>
+                {Object.keys(propType).map((_key) => (
+                    <option key={_key} value={_key}>
+                        {_key}
                     </option>
                 ))}
             </select>
@@ -127,9 +101,29 @@ const DocumentCard = (): JSX.Element => {
                     <span>Document</span>
                 </header>
                 <div className="document">
-                    <LanguagesComponent onBlur={handleOnBlur} initialValue={documentCard.language} />
-                    <LocationsComponent onBlur={handleOnBlur} initialValue={documentCard.location} />
-                    <OriginsComponent onBlur={handleOnBlur} initialValue={documentCard.origin} />
+                    <DocumentComponent
+                        title="Langue du contrat"
+                        propType={Languages}
+                        name="language"
+                        onBlur={handleOnBlur}
+                        initialValue={documentCard.language}
+                    />
+
+                    <DocumentComponent
+                        title="Endroit de la location"
+                        propType={Locations}
+                        name="location"
+                        onBlur={handleOnBlur}
+                        initialValue={documentCard.location}
+                    />
+
+                    <DocumentComponent
+                        title="Site de la résa"
+                        propType={Origins}
+                        name="origin"
+                        onBlur={handleOnBlur}
+                        initialValue={documentCard.origin}
+                    />
                 </div>
             </div>
         </>

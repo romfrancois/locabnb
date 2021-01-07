@@ -8,6 +8,8 @@ import nanoid from 'nanoid';
 import { RenterContext } from '../App';
 import GoogleConnection from './google/GoogleConnection';
 
+import menuComponentCss from '../res/css/Menu.module.css';
+
 type Action = { type: 'setGoogleConnected'; value: boolean };
 
 type contextProp = {
@@ -18,7 +20,7 @@ const MenuContext = React.createContext({} as contextProp);
 const componentID = nanoid(10);
 
 const MenuComponent = (): JSX.Element => {
-    console.log('MenuComponent');
+    console.log(`MenuComponent`);
     const { dispatch } = useContext(RenterContext);
 
     const {
@@ -50,7 +52,7 @@ const MenuComponent = (): JSX.Element => {
 
     return (
         <>
-            <div className="menu" key={`${componentID}`}>
+            <div className={menuComponentCss.menu} key={`${componentID}`}>
                 <button type="submit" name="setForm" onClick={handleMenu}>
                     <FontAwesomeIcon className="faStyle fa-3x" icon={faWpforms} />
                     <span>Formulaire</span>

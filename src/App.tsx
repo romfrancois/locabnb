@@ -18,17 +18,12 @@ import { State } from './types/State';
 import GoogleSheet from './components/google/GoogleSheet';
 import MenuComponent from './components/Menu';
 
+import styles from './res/css/index.module.css';
+
 type Action =
     | { type: 'setGoogleConnected'; value: boolean }
-    | { type: 'setGSheetConnected'; value: boolean }
-    | {
-          type: 'setState';
-          value: {
-              action: 'save' | 'updated';
-              row?: number;
-              nextInsertionRow?: number;
-          };
-      }
+    | { type: 'enableTableMenu'; value: boolean }
+    | { type: 'setState'; value: { action: 'loadData' | 'save' | 'updated'; row?: number; nextInsertionRow?: number } }
     | { type: 'setNbRenters'; value: number }
     | { type: 'setSelectedRenter'; value: number }
     | { type: 'setInfo'; value: Info }
@@ -71,7 +66,7 @@ function locabnbReducer(state: LocaBnBApp, action: Action) {
                     },
                 },
             };
-        case 'setGSheetConnected':
+        case 'enableTableMenu':
             return {
                 ...state,
                 status: {
@@ -158,6 +153,8 @@ function locabnbReducer(state: LocaBnBApp, action: Action) {
 }
 
 const App = (): JSX.Element => {
+    console.log('App component rendered');
+
     const [locaBnBAppState, dispatch] = useReducer(locabnbReducer, locabnbIS);
 
     const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
@@ -166,8 +163,6 @@ const App = (): JSX.Element => {
         const {
             currentTarget: { name },
         } = e;
-
-        console.log('event: ', name);
 
         switch (name) {
             case 'resetData':
@@ -184,7 +179,7 @@ const App = (): JSX.Element => {
                     },
                 });
 
-                dispatch({ type: 'setGSheetConnected', value: false });
+                dispatch({ type: 'enableTableMenu', value: false });
                 break;
             default:
                 break;
@@ -197,14 +192,22 @@ const App = (): JSX.Element => {
                 <MenuComponent />
             </RenterContext.Provider>
 
-            <div className="container">
-                <div id="table" className={locaBnBAppState.menuSelected === 'table' ? 'visible' : 'invisible'}>
+            <div className={styles.container}>
+                <div
+                    id="table"
+                    className={`${locaBnBAppState.menuSelected === 'table' ? styles.visible : styles.invisible}`}
+                >
                     <RenterContext.Provider value={{ state: locaBnBAppState, dispatch }}>
                         <GoogleSheet />
                     </RenterContext.Provider>
                 </div>
 
-                <div id="form" className={`form ${locaBnBAppState.menuSelected === 'table' ? 'invisible' : 'visible'}`}>
+                <div
+                    id="form"
+                    className={`${styles.form} ${
+                        locaBnBAppState.menuSelected === 'table' ? styles.invisible : styles.visible
+                    }`}
+                >
                     <RenterContext.Provider value={{ state: locaBnBAppState, dispatch }}>
                         <InfoCard />
                         <DatesCard />
@@ -213,7 +216,7 @@ const App = (): JSX.Element => {
                         <DocumentCard />
                     </RenterContext.Provider>
 
-                    <div className="menuButtons">
+                    <div className={styles.menuButtons}>
                         <button type="submit" name="resetData" onClick={handleOnClick}>
                             <FontAwesomeIcon className="faStyle fa-3x" icon={faFile} />
                             <span>Remettre à zéro le formulaire</span>

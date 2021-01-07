@@ -8,6 +8,8 @@ import { faFileSignature } from '@fortawesome/free-solid-svg-icons';
 import { RenterContext } from '../App';
 import { Document, Languages, Locations, Origins } from '../types/Document';
 
+import documentCss from '../res/css/DocumentCard.module.css';
+
 let componentID = nanoid(10);
 
 export const documentCardIS: Document = {
@@ -26,9 +28,15 @@ type componentProp = {
 
 const DocumentComponent = ({ title, propType, name, onBlur, initialValue }: componentProp) => {
     return (
-        <div className={name}>
+        <div className={documentCss.subProp}>
             <span>{title}</span>
-            <select id={name} name={name} className="input-sm" onBlur={onBlur} defaultValue={initialValue}>
+            <select
+                id={name}
+                name={name}
+                className={documentCss['input-sm']}
+                onBlur={onBlur}
+                defaultValue={initialValue}
+            >
                 {Object.keys(propType).map((_key) => (
                     <option key={_key} value={_key}>
                         {_key}
@@ -94,39 +102,37 @@ const DocumentCard = (): JSX.Element => {
     }, [dispatch, documentCard]);
 
     return (
-        <>
-            <div className="documentCard" key={`${componentID}`}>
-                <header>
-                    <FontAwesomeIcon className="faStyle fa-3x" icon={faFileSignature} />
-                    <span>Document</span>
-                </header>
-                <div className="document">
-                    <DocumentComponent
-                        title="Langue du contrat"
-                        propType={Languages}
-                        name="language"
-                        onBlur={handleOnBlur}
-                        initialValue={documentCard.language}
-                    />
+        <div className={documentCss.main} key={`${componentID}`}>
+            <header>
+                <FontAwesomeIcon className="faStyle fa-3x" icon={faFileSignature} />
+                <span>Document</span>
+            </header>
+            <div>
+                <DocumentComponent
+                    title="Langue du contrat"
+                    propType={Languages}
+                    name="language"
+                    onBlur={handleOnBlur}
+                    initialValue={documentCard.language}
+                />
 
-                    <DocumentComponent
-                        title="Endroit de la location"
-                        propType={Locations}
-                        name="location"
-                        onBlur={handleOnBlur}
-                        initialValue={documentCard.location}
-                    />
+                <DocumentComponent
+                    title="Endroit de la location"
+                    propType={Locations}
+                    name="location"
+                    onBlur={handleOnBlur}
+                    initialValue={documentCard.location}
+                />
 
-                    <DocumentComponent
-                        title="Site de la résa"
-                        propType={Origins}
-                        name="origin"
-                        onBlur={handleOnBlur}
-                        initialValue={documentCard.origin}
-                    />
-                </div>
+                <DocumentComponent
+                    title="Site de la résa"
+                    propType={Origins}
+                    name="origin"
+                    onBlur={handleOnBlur}
+                    initialValue={documentCard.origin}
+                />
             </div>
-        </>
+        </div>
     );
 };
 

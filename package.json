@@ -59,6 +59,7 @@
   "devDependencies": {
     "@commitlint/cli": "^10.0.0",
     "@commitlint/config-conventional": "^10.0.0",
+    "@teamsupercell/typings-for-css-modules-loader": "^2.4.0",
     "@types/gapi": "0.0.39",
     "@types/gapi.auth2": "0.0.52",
     "@types/gapi.client.sheets": "4.0.14",

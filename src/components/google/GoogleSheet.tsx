@@ -175,11 +175,18 @@ const GoogleSheet = (): JSX.Element => {
     const SPREADSHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}`;
 
     useEffect(() => {
+        if (connected) {
+            dispatch({ type: 'setState', value: { action: 'loadData' } });
+        }
+    }, [connected, dispatch]);
+
+    useEffect(() => {
         const SHEET_STARTING_POINT = 'A1'; // 1st col that defines fixed cols' names
         const SHEET_ENDING_POINT = 'U'; // Last col to consider in the spreadsheet
 
         const getLatestRenters = () => {
             console.log('connected? ', connected);
+            console.log('action? ', action);
 
             gapi.client.sheets.spreadsheets.values
                 .get({
@@ -189,7 +196,7 @@ const GoogleSheet = (): JSX.Element => {
                 .then(
                     (response) => {
                         console.log('response: ', response);
-                        dispatch({ type: 'setGSheetConnected', value: true });
+                        dispatch({ type: 'enableTableMenu', value: true });
 
                         const tab: Map<string, Array<string>> = new Map();
 
@@ -209,7 +216,7 @@ const GoogleSheet = (): JSX.Element => {
                     (response) => {
                         console.error(`Error: ${response.result.error.message}`);
 
-                        dispatch({ type: 'setGSheetConnected', value: false });
+                        dispatch({ type: 'enableTableMenu', value: false });
 
                         store.addNotification({
                             title: 'Erreur',
@@ -228,10 +235,10 @@ const GoogleSheet = (): JSX.Element => {
                 );
         };
 
-        if (connected || action === 'updated') {
+        if (connected && action === 'loadData') {
             getLatestRenters();
         }
-    }, [action, dispatch, connected]);
+    }, [dispatch, connected, action]);
 
     useEffect(() => {
         console.log('rawRenters: ', rawRenters?.size);
@@ -309,8 +316,6 @@ const GoogleSheet = (): JSX.Element => {
                     console.log('response: ', response);
 
                     if (response.status === 200) {
-                        dispatch({ type: 'setState', value: { action: 'updated', row } });
-
                         store.addNotification({
                             title: 'Location enregistrée',
                             message: 'La location est correctement enregistrée dans le fichier Excel',
@@ -322,6 +327,9 @@ const GoogleSheet = (): JSX.Element => {
                             dismiss: {
                                 duration: 5000,
                                 onScreen: true,
+                            },
+                            onRemoval: () => {
+                                dispatch({ type: 'setState', value: { action: 'loadData' } });
                             },
                         });
                     } else {

@@ -4,7 +4,7 @@ import { Contact } from './Contact';
 export type Info = {
     name: string;
     surname: string;
-    nbPersones: string;
+    nbPersonnes: string;
     kids: string;
     address: Address;
     contact: Contact;

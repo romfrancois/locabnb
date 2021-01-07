@@ -10,54 +10,28 @@ import { Document, Languages, Locations, Origins } from '../types/Document';
 
 let componentID = nanoid(10);
 
-const documentCardIS: Document = {
+export const documentCardIS: Document = {
     language: Languages.FR,
     location: Locations.BELLEGARDE,
     origin: Origins.AIRBNB,
 };
 
-type subComponentProp = {
-    onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
-    initialValue: Languages | Locations | Origins;
+type componentProp = {
+    title: string;
+    propType: typeof Languages | typeof Locations | typeof Origins;
+    name: string;
+    onBlur: (event: ChangeEvent<HTMLSelectElement>) => void;
+    initialValue: string;
 };
 
-const LanguagesComponent = ({ onChange, initialValue }: subComponentProp) => {
+const DocumentComponent = ({ title, propType, name, onBlur, initialValue }: componentProp) => {
     return (
-        <div className="language">
-            <span>Langue du contrat</span>
-            <select id="language" name="language" className="input-sm" onChange={onChange} defaultValue={initialValue}>
-                {Object.keys(Languages).map((language) => (
-                    <option key={language} defaultValue={initialValue}>
-                        {language}
-                    </option>
-                ))}
-            </select>
-        </div>
-    );
-};
-
-const LocationsComponent = ({ onChange, initialValue }: subComponentProp) => {
-    return (
-        <div className="location">
-            <span>Endroit de la location</span>
-            <select id="location" name="location" className="input-sm" onChange={onChange} defaultValue={initialValue}>
-                {Object.keys(Locations).map((location) => (
-                    <option key={location} value={location}>
-                        {location}
-                    </option>
-                ))}
-            </select>
-        </div>
-    );
-};
-const OriginsComponent = ({ onChange, initialValue }: subComponentProp) => {
-    return (
-        <div className="origin">
-            <span>Site de la résa</span>
-            <select id="origin" name="origin" className="input-sm" onChange={onChange} defaultValue={initialValue}>
-                {Object.keys(Origins).map((origin) => (
-                    <option key={origin} value={origin}>
-                        {origin}
+        <div className={name}>
+            <span>{title}</span>
+            <select id={name} name={name} className="input-sm" onBlur={onBlur} defaultValue={initialValue}>
+                {Object.keys(propType).map((_key) => (
+                    <option key={_key} value={_key}>
+                        {_key}
                     </option>
                 ))}
             </select>
@@ -79,23 +53,26 @@ const DocumentCard = (): JSX.Element => {
     const sizeOfDocument = Object.keys(document).length;
     const [documentCard, setDocumentCard] = useState(sizeOfDocument !== 0 ? document : documentCardIS);
 
-    const handleOnChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-        const { name, value } = e.target;
+    const handleOnBlur = React.useCallback(
+        (e: React.ChangeEvent<HTMLSelectElement>): void => {
+            const { name, value } = e.target;
 
-        switch (name) {
-            case 'language':
-                setDocumentCard({ ...documentCard, language: value as Languages });
-                break;
-            case 'location':
-                setDocumentCard({ ...documentCard, location: value as Locations });
-                break;
-            case 'origin':
-                setDocumentCard({ ...documentCard, origin: value as Origins });
-                break;
-            default:
-                break;
-        }
-    };
+            switch (name) {
+                case 'language':
+                    setDocumentCard({ ...documentCard, language: value as Languages });
+                    break;
+                case 'location':
+                    setDocumentCard({ ...documentCard, location: value as Locations });
+                    break;
+                case 'origin':
+                    setDocumentCard({ ...documentCard, origin: value as Origins });
+                    break;
+                default:
+                    break;
+            }
+        },
+        [documentCard],
+    );
 
     useEffect(() => {
         let updatedData = documentCardIS;
@@ -124,9 +101,29 @@ const DocumentCard = (): JSX.Element => {
                     <span>Document</span>
                 </header>
                 <div className="document">
-                    <LanguagesComponent onChange={handleOnChange} initialValue={documentCard.language} />
-                    <LocationsComponent onChange={handleOnChange} initialValue={documentCard.location} />
-                    <OriginsComponent onChange={handleOnChange} initialValue={documentCard.origin} />
+                    <DocumentComponent
+                        title="Langue du contrat"
+                        propType={Languages}
+                        name="language"
+                        onBlur={handleOnBlur}
+                        initialValue={documentCard.language}
+                    />
+
+                    <DocumentComponent
+                        title="Endroit de la location"
+                        propType={Locations}
+                        name="location"
+                        onBlur={handleOnBlur}
+                        initialValue={documentCard.location}
+                    />
+
+                    <DocumentComponent
+                        title="Site de la résa"
+                        propType={Origins}
+                        name="origin"
+                        onBlur={handleOnBlur}
+                        initialValue={documentCard.origin}
+                    />
                 </div>
             </div>
         </>

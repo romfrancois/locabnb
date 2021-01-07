@@ -10,6 +10,12 @@ import { Prices } from '../types/Prices';
 
 let componentID = nanoid(10);
 
+export const pricesCardIS: Prices = {
+    price: 0,
+    arrhes: 0,
+    garantie: 0,
+};
+
 const PricesCard = (): JSX.Element => {
     console.log('PricesCard');
     const { dispatch } = useContext(RenterContext);
@@ -23,7 +29,7 @@ const PricesCard = (): JSX.Element => {
     } = useContext(RenterContext);
 
     const sizeOfPrices = Object.keys(prices).length;
-    const [pricesCard, setPricesCard] = useState(sizeOfPrices !== 0 ? prices : ({} as Prices));
+    const [pricesCard, setPricesCard] = useState(sizeOfPrices !== 0 ? prices : pricesCardIS);
 
     useEffect(() => {
         let updatedData = {} as Prices;
@@ -48,23 +54,26 @@ const PricesCard = (): JSX.Element => {
         dispatch({ type: 'setPrices', value: pricesCard });
     }, [dispatch, pricesCard]);
 
-    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
-        const { name, value } = e.target;
+    const handleOnBlur = React.useCallback(
+        (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
+            const { name, value } = e.target;
 
-        switch (name) {
-            case 'price':
-                setPricesCard({ ...pricesCard, price: Number(value) });
-                break;
-            case 'arrhes':
-                setPricesCard({ ...pricesCard, arrhes: Number(value) });
-                break;
-            case 'garantie':
-                setPricesCard({ ...pricesCard, garantie: Number(value) });
-                break;
-            default:
-                break;
-        }
-    };
+            switch (name) {
+                case 'price':
+                    setPricesCard({ ...pricesCard, price: Number(value) });
+                    break;
+                case 'arrhes':
+                    setPricesCard({ ...pricesCard, arrhes: Number(value) });
+                    break;
+                case 'garantie':
+                    setPricesCard({ ...pricesCard, garantie: Number(value) });
+                    break;
+                default:
+                    break;
+            }
+        },
+        [pricesCard],
+    );
 
     return (
         <>
@@ -82,7 +91,7 @@ const PricesCard = (): JSX.Element => {
                             id="price"
                             placeholder="Prix"
                             className="input-med"
-                            onChange={handleOnChange}
+                            onBlur={handleOnBlur}
                             defaultValue={pricesCard?.price === 0 ? 'Prix' : pricesCard.price}
                         />
                     </div>
@@ -94,7 +103,7 @@ const PricesCard = (): JSX.Element => {
                             id="arrhes"
                             placeholder="Arrhes"
                             className="input-med"
-                            onChange={handleOnChange}
+                            onBlur={handleOnBlur}
                             defaultValue={pricesCard?.arrhes === 0 ? 'Arrhes' : pricesCard.arrhes}
                         />
                     </div>
@@ -108,7 +117,7 @@ const PricesCard = (): JSX.Element => {
                             id="garantie"
                             placeholder="Garantie"
                             className="input-med"
-                            onChange={handleOnChange}
+                            onBlur={handleOnBlur}
                             defaultValue={pricesCard?.garantie === 0 ? 'Garantie' : pricesCard.garantie}
                         />
                     </div>

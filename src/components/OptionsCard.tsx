@@ -10,6 +10,11 @@ import { Options } from '../types/Options';
 
 let componentID = nanoid(10);
 
+export const optionsCardIS: Options = {
+    cleaning: 0,
+    sheets: 0,
+};
+
 const OptionsCard = (): JSX.Element => {
     console.log('OptionsCard');
     const { dispatch } = useContext(RenterContext);
@@ -23,7 +28,7 @@ const OptionsCard = (): JSX.Element => {
     } = useContext(RenterContext);
 
     const sizeOfOptions = Object.keys(options).length;
-    const [optionsCard, setOptionsCard] = useState(sizeOfOptions !== 0 ? options : ({} as Options));
+    const [optionsCard, setOptionsCard] = useState(sizeOfOptions !== 0 ? options : optionsCardIS);
 
     useEffect(() => {
         let updatedData = {} as Options;
@@ -47,20 +52,23 @@ const OptionsCard = (): JSX.Element => {
         dispatch({ type: 'setOptions', value: optionsCard });
     }, [dispatch, optionsCard]);
 
-    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
-        const { name, value } = e.target;
+    const handleOnBlur = React.useCallback(
+        (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
+            const { name, value } = e.target;
 
-        switch (name) {
-            case 'cleaning':
-                setOptionsCard({ ...optionsCard, cleaning: Number(value) });
-                break;
-            case 'sheets':
-                setOptionsCard({ ...optionsCard, sheets: Number(value) });
-                break;
-            default:
-                break;
-        }
-    };
+            switch (name) {
+                case 'cleaning':
+                    setOptionsCard({ ...optionsCard, cleaning: Number(value) });
+                    break;
+                case 'sheets':
+                    setOptionsCard({ ...optionsCard, sheets: Number(value) });
+                    break;
+                default:
+                    break;
+            }
+        },
+        [optionsCard],
+    );
 
     return (
         <>
@@ -78,7 +86,7 @@ const OptionsCard = (): JSX.Element => {
                             id="cleaning"
                             placeholder="Ménage"
                             className="input-med"
-                            onChange={handleOnChange}
+                            onBlur={handleOnBlur}
                             defaultValue={optionsCard.cleaning === 0 ? 'Ménage' : optionsCard.cleaning}
                         />
                     </div>
@@ -92,7 +100,7 @@ const OptionsCard = (): JSX.Element => {
                             id="sheets"
                             placeholder="Draps & Linges de bain"
                             className="input-med"
-                            onChange={handleOnChange}
+                            onBlur={handleOnBlur}
                             defaultValue={optionsCard?.sheets === 0 ? 'Draps & Linges de bain' : optionsCard.sheets}
                         />
                     </div>

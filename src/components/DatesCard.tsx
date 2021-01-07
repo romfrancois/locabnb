@@ -10,6 +10,11 @@ import { Dates } from '../types/Dates';
 
 let componentID = nanoid(10);
 
+export const datesCardIS: Dates = {
+    start: '',
+    end: '',
+};
+
 const DatesCard = (): JSX.Element => {
     console.log('DatesCard');
     const { dispatch } = useContext(RenterContext);
@@ -23,15 +28,18 @@ const DatesCard = (): JSX.Element => {
     } = useContext(RenterContext);
 
     const sizeOfDates = Object.keys(dates).length;
-    const [datesCard, setDatesCard] = useState(sizeOfDates !== 0 ? dates : ({} as Dates));
+    const [datesCard, setDatesCard] = useState(sizeOfDates !== 0 ? dates : datesCardIS);
 
     useEffect(() => {
         let updatedData = {} as Dates;
 
         if (loadDataToState.length > 0) {
+            const start = loadDataToState[12].split(/\/|\s/);
+            const end = loadDataToState[13].split(/\/|\s/);
+
             updatedData = {
-                start: loadDataToState[12],
-                end: loadDataToState[13],
+                start: `${start.slice(0, 3).reverse().join('-')}T${start[3]?.slice(0, 5) || '12:00'}`,
+                end: `${end.slice(0, 3).reverse().join('-')}T${end[3]?.slice(0, 5) || '12:00'}`,
             };
         }
 
@@ -43,20 +51,23 @@ const DatesCard = (): JSX.Element => {
         dispatch({ type: 'setDates', value: datesCard });
     }, [dispatch, datesCard]);
 
-    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
-        const { name, value } = e.target;
+    const handleOnBlur = React.useCallback(
+        (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
+            const { name, value } = e.target;
 
-        switch (name) {
-            case 'start':
-                setDatesCard({ ...datesCard, start: value });
-                break;
-            case 'end':
-                setDatesCard({ ...datesCard, end: value });
-                break;
-            default:
-                break;
-        }
-    };
+            switch (name) {
+                case 'start':
+                    setDatesCard({ ...datesCard, start: value });
+                    break;
+                case 'end':
+                    setDatesCard({ ...datesCard, end: value });
+                    break;
+                default:
+                    break;
+            }
+        },
+        [datesCard],
+    );
 
     return (
         <>
@@ -73,7 +84,7 @@ const DatesCard = (): JSX.Element => {
                                 type="datetime-local"
                                 name="start"
                                 id="start"
-                                onChange={handleOnChange}
+                                onBlur={handleOnBlur}
                                 defaultValue={datesCard?.start}
                             />
                         </div>
@@ -83,7 +94,7 @@ const DatesCard = (): JSX.Element => {
                                 type="datetime-local"
                                 name="end"
                                 id="end"
-                                onChange={handleOnChange}
+                                onBlur={handleOnBlur}
                                 defaultValue={datesCard?.end}
                             />
                         </div>

@@ -11,6 +11,7 @@ export enum Locations {
 export enum Origins {
     HOMEAWAY = 'HOMEAWAY',
     AIRBNB = 'AIRBNB',
+    NOUS = 'NOUS',
 }
 
 export type Document = {

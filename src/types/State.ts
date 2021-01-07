@@ -1,6 +1,11 @@
-export type State = {
+type Google = {
     connected: boolean;
-    action: 'save' | 'update' | 'updated';
+    gsheet: boolean;
+};
+
+export type State = {
+    googleState: Google;
+    action: 'save' | 'updated';
     row?: number;
     nextInsertionRow?: number;
 };

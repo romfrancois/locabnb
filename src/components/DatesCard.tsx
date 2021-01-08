@@ -13,8 +13,10 @@ import datesCss from '../res/css/DatesCard.module.css';
 let componentID = nanoid(10);
 
 export const datesCardIS: Dates = {
-    start: '',
-    end: '',
+    startDate: '',
+    startTime: '',
+    endDate: '',
+    endTime: '',
 };
 
 const DatesCard = (): JSX.Element => {
@@ -36,12 +38,17 @@ const DatesCard = (): JSX.Element => {
         let updatedData = {} as Dates;
 
         if (loadDataToState.length > 0) {
-            const start = loadDataToState[12].split(/\/|\s/);
-            const end = loadDataToState[13].split(/\/|\s/);
+            const startDate = loadDataToState[12].split(/\/|\s/);
+            const startTime = loadDataToState[13];
+
+            const endDate = loadDataToState[14].split(/\/|\s/);
+            const endTime = loadDataToState[15];
 
             updatedData = {
-                start: `${start.slice(0, 3).reverse().join('-')}T${start[3]?.slice(0, 5) || '12:00'}`,
-                end: `${end.slice(0, 3).reverse().join('-')}T${end[3]?.slice(0, 5) || '12:00'}`,
+                startDate: `${startDate?.slice(0, 3).reverse().join('-') || '2021-01-01'}`,
+                startTime: startTime || '12:00',
+                endDate: `${endDate?.slice(0, 3).reverse().join('-') || '2021-01-01'}`,
+                endTime: endTime || '12:00',
             };
         }
 
@@ -58,11 +65,17 @@ const DatesCard = (): JSX.Element => {
             const { name, value } = e.target;
 
             switch (name) {
-                case 'start':
-                    setDatesCard({ ...datesCard, start: value });
+                case 'startDate':
+                    setDatesCard({ ...datesCard, startDate: value });
                     break;
-                case 'end':
-                    setDatesCard({ ...datesCard, end: value });
+                case 'startTime':
+                    setDatesCard({ ...datesCard, startTime: value });
+                    break;
+                case 'endDate':
+                    setDatesCard({ ...datesCard, endDate: value });
+                    break;
+                case 'endTime':
+                    setDatesCard({ ...datesCard, endTime: value });
                     break;
                 default:
                     break;
@@ -83,21 +96,39 @@ const DatesCard = (): JSX.Element => {
                         <div className={datesCss.start}>
                             <span>Début de la location</span>
                             <input
-                                type="datetime-local"
-                                name="start"
-                                id="start"
+                                type="date"
+                                name="startDate"
+                                id="startDate"
                                 onBlur={handleOnBlur}
-                                defaultValue={datesCard?.start}
+                                defaultValue={datesCard?.startDate}
+                                placeholder="Date au format JJ/MM/AAAA"
+                            />
+                            <input
+                                type="time"
+                                name="startTime"
+                                id="startTime"
+                                onBlur={handleOnBlur}
+                                defaultValue={datesCard?.startTime}
+                                placeholder="Heure au format HH:MM"
                             />
                         </div>
                         <div className={datesCss.end}>
                             <span>Fin de la location</span>
                             <input
-                                type="datetime-local"
-                                name="end"
-                                id="end"
+                                type="date"
+                                name="endDate"
+                                id="endDate"
                                 onBlur={handleOnBlur}
-                                defaultValue={datesCard?.end}
+                                defaultValue={datesCard?.endDate}
+                                placeholder="Date au format JJ/MM/AAAA"
+                            />
+                            <input
+                                type="time"
+                                name="endTime"
+                                id="endTime"
+                                onBlur={handleOnBlur}
+                                defaultValue={datesCard?.endTime}
+                                placeholder="Heure au format HH:MM"
                             />
                         </div>
                     </div>

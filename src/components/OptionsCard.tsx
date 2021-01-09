@@ -45,11 +45,12 @@ const OptionsCard = (): JSX.Element => {
         if (loadDataToState.length > 0) {
             const cleaning = Number(loadDataToState[19]);
             const sheets = Number(loadDataToState[20]);
+            const fees = Number(loadDataToState[21]);
 
             updatedData = {
                 cleaning: Number.isNaN(cleaning) ? 0 : cleaning,
                 sheets: Number.isNaN(sheets) ? 0 : sheets,
-                fees: 0,
+                fees: Number.isNaN(fees) ? 0 : fees,
             };
         }
 
@@ -137,7 +138,7 @@ const OptionsCard = (): JSX.Element => {
                             placeholder="Frais de gestion"
                             className="input-med"
                             onBlur={handleOnBlur}
-                            defaultValue={optionsCard?.fees === 0 ? 'Frais de gestion' : optionsCard.sheets}
+                            defaultValue={optionsCard?.fees === 0 ? 'Frais de gestion' : optionsCard.fees}
                         />
                     </div>
                 </div>

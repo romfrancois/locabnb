@@ -187,7 +187,7 @@ const GoogleSheet = (): JSX.Element => {
 
     useEffect(() => {
         const SHEET_STARTING_POINT = 'A1'; // 1st col that defines fixed cols' names
-        const SHEET_ENDING_POINT = 'W'; // Last col to consider in the spreadsheet
+        const SHEET_ENDING_POINT = 'X'; // Last col to consider in the spreadsheet
 
         const getLatestRenters = () => {
             console.log('connected? ', connected);

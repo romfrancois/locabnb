@@ -9,24 +9,31 @@ import { RenterContext } from '../App';
 import { Options } from '../types/Options';
 
 import optionsCss from '../res/css/OptionsCard.module.scss';
+import { Origins } from '../types/Document';
 
 let componentID = nanoid(10);
 
 export const optionsCardIS: Options = {
     cleaning: 0,
     sheets: 0,
+    fees: 0,
 };
 
 const OptionsCard = (): JSX.Element => {
     console.log('OptionsCard');
     const { dispatch } = useContext(RenterContext);
 
+    const [feesVisibility, setFeesVisibility] = useState(false);
+
     const {
         state: { options },
     } = useContext(RenterContext);
 
     const {
-        state: { loadDataToState },
+        state: {
+            loadDataToState,
+            document: { origin },
+        },
     } = useContext(RenterContext);
 
     const sizeOfOptions = Object.keys(options).length;
@@ -42,6 +49,7 @@ const OptionsCard = (): JSX.Element => {
             updatedData = {
                 cleaning: Number.isNaN(cleaning) ? 0 : cleaning,
                 sheets: Number.isNaN(sheets) ? 0 : sheets,
+                fees: 0,
             };
         }
 
@@ -53,6 +61,14 @@ const OptionsCard = (): JSX.Element => {
         dispatch({ type: 'setOptions', value: optionsCard });
     }, [dispatch, optionsCard]);
 
+    useEffect(() => {
+        if (origin === Origins.AIRBNB || origin === Origins.HOMEAWAY) {
+            setFeesVisibility(true);
+        } else {
+            setFeesVisibility(false);
+        }
+    }, [optionsCard.fees, origin]);
+
     const handleOnBlur = React.useCallback(
         (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
             const { name, value } = e.target;
@@ -63,6 +79,9 @@ const OptionsCard = (): JSX.Element => {
                     break;
                 case 'sheets':
                     setOptionsCard({ ...optionsCard, sheets: Number(value) });
+                    break;
+                case 'fees':
+                    setOptionsCard({ ...optionsCard, fees: Number(value) });
                     break;
                 default:
                     break;
@@ -105,6 +124,20 @@ const OptionsCard = (): JSX.Element => {
                             className="input-med"
                             onBlur={handleOnBlur}
                             defaultValue={optionsCard?.sheets === 0 ? 'Draps & Linges de bain' : optionsCard.sheets}
+                        />
+                    </div>
+                    <div className={`${feesVisibility ? optionsCss.visible : optionsCss.invisible} ${optionsCss.fees}`}>
+                        <div className={`${optionsCard.fees > 0 ? optionsCss.visible : optionsCss.invisible} `}>
+                            Frais de gestion
+                        </div>
+                        <input
+                            type="number"
+                            name="fees"
+                            id="fees"
+                            placeholder="Frais de gestion"
+                            className="input-med"
+                            onBlur={handleOnBlur}
+                            defaultValue={optionsCard?.fees === 0 ? 'Frais de gestion' : optionsCard.sheets}
                         />
                     </div>
                 </div>

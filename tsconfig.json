@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "es6",
         "lib": ["dom", "dom.iterable", "esnext"],
         "allowJs": true,
         "skipLibCheck": true,
@@ -15,7 +15,7 @@
         "noEmit": false,
         "jsx": "react"
     },
-    "include": ["src", "src/res"],
+    "include": ["src", "src/res/css"],
     "exclude": ["node_modules"],
     "typeRoots": ["types/react-table-lite.d.ts"]
 }

@@ -8,6 +8,8 @@ import { faCommentsDollar } from '@fortawesome/free-solid-svg-icons';
 import { RenterContext } from '../App';
 import { Prices } from '../types/Prices';
 
+import pricesCss from '../res/css/PricesCard.module.css';
+
 let componentID = nanoid(10);
 
 export const pricesCardIS: Prices = {
@@ -77,14 +79,14 @@ const PricesCard = (): JSX.Element => {
 
     return (
         <>
-            <div className="pricesCard" key={`${componentID}`}>
+            <div className={pricesCss.main} key={`${componentID}`}>
                 <header>
                     <FontAwesomeIcon className="faStyle fa-3x" icon={faCommentsDollar} />
                     <span>Prix location</span>
                 </header>
-                <div className="prices">
-                    <div className="price">
-                        <div className={`labelFees ${pricesCard.price > 0 ? 'visible' : 'unvisible'} `}>Prix</div>
+                <div className={pricesCss.prices}>
+                    <div className={pricesCss.price}>
+                        <div className={`${pricesCard.price > 0 ? pricesCss.visible : pricesCss.invisible} `}>Prix</div>
                         <input
                             type="number"
                             name="price"
@@ -95,8 +97,10 @@ const PricesCard = (): JSX.Element => {
                             defaultValue={pricesCard?.price === 0 ? 'Prix' : pricesCard.price}
                         />
                     </div>
-                    <div className="arrhes">
-                        <div className={`labelFees ${pricesCard.arrhes > 0 ? 'visible' : 'unvisible'} `}>Arrhes</div>
+                    <div className={pricesCss.arrhes}>
+                        <div className={`${pricesCard.arrhes > 0 ? pricesCss.visible : pricesCss.invisible} `}>
+                            Arrhes
+                        </div>
                         <input
                             type="number"
                             name="arrhes"
@@ -107,8 +111,8 @@ const PricesCard = (): JSX.Element => {
                             defaultValue={pricesCard?.arrhes === 0 ? 'Arrhes' : pricesCard.arrhes}
                         />
                     </div>
-                    <div className="garantie">
-                        <div className={`labelFees ${pricesCard.garantie > 0 ? 'visible' : 'unvisible'} `}>
+                    <div className={pricesCss.garantie}>
+                        <div className={`${pricesCard.garantie > 0 ? pricesCss.visible : pricesCss.invisible} `}>
                             Garantie
                         </div>
                         <input

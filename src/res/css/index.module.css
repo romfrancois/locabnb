@@ -1,0 +1,116 @@
+a {
+    text-decoration: none;
+}
+
+a:link,
+a:visited,
+a:hover {
+    color: white;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 3rem;
+
+    background-color: rgba(25, 25, 25, 0.3);
+    border-radius: 15px;
+    padding: 1rem;
+}
+
+.form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.visible {
+    display: flex;
+    transition: display 1s ease-in-out;
+}
+
+.gsheetCard {
+    flex-direction: column;
+}
+
+.invisible {
+    display: none;
+    transition: display 2s ease-in-out;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 1rem;
+    width: 100%;
+
+    color: black;
+    border-radius: 20px 20px 0 0;
+    height: 80px;
+}
+
+header span {
+    font-size: 3rem;
+}
+
+input {
+    background-color: transparent;
+    border-radius: 50px;
+    border: 2px solid #22254b;
+    font-family: inherit;
+    font-size: 1.2rem;
+    padding: 0.5rem 1.5rem;
+    color: rgb(103, 99, 99);
+}
+
+input:focus {
+    outline: none;
+}
+
+.input-med {
+    width: 200px;
+}
+
+.input-sm {
+    width: 100px;
+    height: 40px;
+}
+
+.menuButtons {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+span {
+    font-size: 1.5rem;
+    padding: 1rem;
+}
+
+button {
+    align-content: center;
+    display: flex;
+    align-items: center;
+    border-radius: 15px;
+    padding-left: 1rem;
+}
+
+.react-table-lite-container {
+    margin-top: 1rem;
+}
+
+@media (max-width: 375px) {
+    .container {
+        min-width: 0;
+    }
+
+    header {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+}

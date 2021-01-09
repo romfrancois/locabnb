@@ -1,0 +1,63 @@
+.container {
+    width: 600px;
+    background-image: url(https://images.unsplash.com/photo-1528731708534-816fe59f90cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border-radius: 20px 20px 0 0;
+    margin: 1rem;
+}
+
+.renter,
+.people {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    padding-bottom: 0;
+}
+
+.people {
+    padding-bottom: 1rem;
+}
+
+.address {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 1rem;
+}
+
+.address .main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.info-capitalised {
+    text-transform: capitalize;
+}
+
+.info-uppercase {
+    text-transform: uppercase;
+}
+
+.info-lowercase {
+    text-transform: lowercase;
+}
+
+.additional {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.contact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+}

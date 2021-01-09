@@ -8,6 +8,8 @@ import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import { RenterContext } from '../App';
 import { Dates } from '../types/Dates';
 
+import datesCss from '../res/css/DatesCard.module.css';
+
 let componentID = nanoid(10);
 
 export const datesCardIS: Dates = {
@@ -72,13 +74,13 @@ const DatesCard = (): JSX.Element => {
     return (
         <>
             {loadDataToState && (
-                <div className="datesCard" key={`${componentID}`}>
+                <div className={datesCss.main} key={`${componentID}`}>
                     <header>
                         <FontAwesomeIcon className="faStyle fa-3x" icon={faCalendarAlt} />
                         <span>Dates location</span>
                     </header>
-                    <div className="dates">
-                        <div className="start">
+                    <div>
+                        <div className={datesCss.start}>
                             <span>Début de la location</span>
                             <input
                                 type="datetime-local"
@@ -88,7 +90,7 @@ const DatesCard = (): JSX.Element => {
                                 defaultValue={datesCard?.start}
                             />
                         </div>
-                        <div className="end">
+                        <div className={datesCss.end}>
                             <span>Fin de la location</span>
                             <input
                                 type="datetime-local"

@@ -8,6 +8,8 @@ import { faTasks } from '@fortawesome/free-solid-svg-icons';
 import { RenterContext } from '../App';
 import { Options } from '../types/Options';
 
+import optionsCss from '../res/css/OptionsCard.module.scss';
+
 let componentID = nanoid(10);
 
 export const optionsCardIS: Options = {
@@ -34,7 +36,6 @@ const OptionsCard = (): JSX.Element => {
         let updatedData = {} as Options;
 
         if (loadDataToState.length > 0) {
-            console.log('HERE: ', loadDataToState);
             const cleaning = Number(loadDataToState[17]);
             const sheets = Number(loadDataToState[18]);
 
@@ -72,14 +73,16 @@ const OptionsCard = (): JSX.Element => {
 
     return (
         <>
-            <div className="optionsCard" key={`${componentID}`}>
+            <div className={optionsCss.main} key={`${componentID}`}>
                 <header>
                     <FontAwesomeIcon className="faStyle fa-3x" icon={faTasks} />
                     <span>Options</span>
                 </header>
-                <div className="options">
-                    <div className="cleaning">
-                        <div className={`labelFees ${optionsCard.cleaning > 0 ? 'visible' : 'unvisible'} `}>Ménage</div>
+                <div>
+                    <div className={optionsCss.cleaning}>
+                        <div className={`${optionsCard.cleaning > 0 ? optionsCss.visible : optionsCss.invisible} `}>
+                            Ménage
+                        </div>
                         <input
                             type="number"
                             name="cleaning"
@@ -90,8 +93,8 @@ const OptionsCard = (): JSX.Element => {
                             defaultValue={optionsCard.cleaning === 0 ? 'Ménage' : optionsCard.cleaning}
                         />
                     </div>
-                    <div className="sheets">
-                        <div className={`labelFees ${optionsCard.sheets > 0 ? 'visible' : 'unvisible'} `}>
+                    <div className={optionsCss.sheets}>
+                        <div className={`${optionsCard.sheets > 0 ? optionsCss.visible : optionsCss.invisible} `}>
                             Draps & Linges de bain
                         </div>
                         <input

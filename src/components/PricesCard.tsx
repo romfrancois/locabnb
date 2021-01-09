@@ -37,9 +37,9 @@ const PricesCard = (): JSX.Element => {
         let updatedData = {} as Prices;
 
         if (loadDataToState.length > 0) {
-            const price = Number(loadDataToState[14]);
-            const arrhes = Number(loadDataToState[15]);
-            const garantie = Number(loadDataToState[16]);
+            const price = Number(loadDataToState[16]);
+            const arrhes = Number(loadDataToState[17]);
+            const garantie = Number(loadDataToState[18]);
 
             updatedData = {
                 price: Number.isNaN(price) ? 0 : price,

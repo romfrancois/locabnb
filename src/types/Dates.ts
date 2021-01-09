@@ -1,4 +1,6 @@
 export type Dates = {
-    start: string;
-    end: string;
+    startDate: string;
+    startTime: string;
+    endDate: string;
+    endTime: string;
 };

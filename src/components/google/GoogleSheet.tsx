@@ -27,8 +27,10 @@ type tableDataType = {
     name: string;
     surname: string;
     city: string;
-    start: string;
-    end: string;
+    startDate: string;
+    startTime: string;
+    endDate: string;
+    endTime: string;
     price: string;
     selected: false;
     selectDisabled: true;
@@ -43,9 +45,11 @@ const mapRowData2JSONObject = (renters: Array<string>): tableDataType => {
         name: renters[2],
         surname: renters[3],
         city: renters[6],
-        start: renters[12],
-        end: renters[13],
-        price: renters[14],
+        startDate: renters[12],
+        startTime: renters[13],
+        endDate: renters[14],
+        endTime: renters[15],
+        price: renters[16],
         selected: false,
         selectDisabled: true,
     };
@@ -79,7 +83,8 @@ function UserData({ data, dispatch }: userDataProp) {
             data={dataForTable}
             // Array of JSONObjects(required)
             // 'id',
-            header={['name', 'surname', 'start', 'end', 'price']}
+            header={['name', 'surname', 'startDate', 'startTime', 'endDate', 'endTime', 'price']}
+            // header={['Prénom', 'Nom', 'Date début', 'Heure début', 'Date fin', 'Heure fin', 'Prix']}
             // Headers should be same as data JSON Object's keys (required)
             // sortBy={['name', 'surname']}
             // keys for sorting should be present in header array
@@ -182,7 +187,7 @@ const GoogleSheet = (): JSX.Element => {
 
     useEffect(() => {
         const SHEET_STARTING_POINT = 'A1'; // 1st col that defines fixed cols' names
-        const SHEET_ENDING_POINT = 'U'; // Last col to consider in the spreadsheet
+        const SHEET_ENDING_POINT = 'W'; // Last col to consider in the spreadsheet
 
         const getLatestRenters = () => {
             console.log('connected? ', connected);

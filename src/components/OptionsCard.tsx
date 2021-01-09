@@ -36,8 +36,8 @@ const OptionsCard = (): JSX.Element => {
         let updatedData = {} as Options;
 
         if (loadDataToState.length > 0) {
-            const cleaning = Number(loadDataToState[17]);
-            const sheets = Number(loadDataToState[18]);
+            const cleaning = Number(loadDataToState[19]);
+            const sheets = Number(loadDataToState[20]);
 
             updatedData = {
                 cleaning: Number.isNaN(cleaning) ? 0 : cleaning,

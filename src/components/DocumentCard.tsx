@@ -87,9 +87,9 @@ const DocumentCard = (): JSX.Element => {
 
         if (loadDataToState.length > 0) {
             updatedData = {
-                language: loadDataToState[19] as Languages,
-                location: loadDataToState[20] as Locations,
-                origin: loadDataToState[21] as Origins,
+                language: loadDataToState[21] as Languages,
+                location: loadDataToState[22] as Locations,
+                origin: loadDataToState[23] as Origins,
             };
         }
 

@@ -3,6 +3,7 @@
 declare namespace OptionsCardModuleScssNamespace {
     export interface IOptionsCardModuleScss {
         cleaning: string;
+        fees: string;
         invisible: string;
         labelFees: string;
         main: string;

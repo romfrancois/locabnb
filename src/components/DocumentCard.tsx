@@ -22,11 +22,11 @@ type componentProp = {
     title: string;
     propType: typeof Languages | typeof Locations | typeof Origins;
     name: string;
-    onBlur: (event: ChangeEvent<HTMLSelectElement>) => void;
+    onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
     initialValue: string;
 };
 
-const DocumentComponent = ({ title, propType, name, onBlur, initialValue }: componentProp) => {
+const DocumentComponent = ({ title, propType, name, onChange, initialValue }: componentProp) => {
     return (
         <div className={documentCss.subProp}>
             <span>{title}</span>
@@ -34,7 +34,7 @@ const DocumentComponent = ({ title, propType, name, onBlur, initialValue }: comp
                 id={name}
                 name={name}
                 className={documentCss['input-sm']}
-                onBlur={onBlur}
+                onChange={onChange}
                 defaultValue={initialValue}
             >
                 {Object.keys(propType).map((_key) => (
@@ -61,7 +61,7 @@ const DocumentCard = (): JSX.Element => {
     const sizeOfDocument = Object.keys(document).length;
     const [documentCard, setDocumentCard] = useState(sizeOfDocument !== 0 ? document : documentCardIS);
 
-    const handleOnBlur = React.useCallback(
+    const handleOnChange = React.useCallback(
         (e: React.ChangeEvent<HTMLSelectElement>): void => {
             const { name, value } = e.target;
 
@@ -87,9 +87,9 @@ const DocumentCard = (): JSX.Element => {
 
         if (loadDataToState.length > 0) {
             updatedData = {
-                language: loadDataToState[21] as Languages,
-                location: loadDataToState[22] as Locations,
-                origin: loadDataToState[23] as Origins,
+                language: loadDataToState[22] as Languages,
+                location: loadDataToState[23] as Locations,
+                origin: loadDataToState[24] as Origins,
             };
         }
 
@@ -112,7 +112,7 @@ const DocumentCard = (): JSX.Element => {
                     title="Langue du contrat"
                     propType={Languages}
                     name="language"
-                    onBlur={handleOnBlur}
+                    onChange={handleOnChange}
                     initialValue={documentCard.language}
                 />
 
@@ -120,7 +120,7 @@ const DocumentCard = (): JSX.Element => {
                     title="Endroit de la location"
                     propType={Locations}
                     name="location"
-                    onBlur={handleOnBlur}
+                    onChange={handleOnChange}
                     initialValue={documentCard.location}
                 />
 
@@ -128,7 +128,7 @@ const DocumentCard = (): JSX.Element => {
                     title="Site de la résa"
                     propType={Origins}
                     name="origin"
-                    onBlur={handleOnBlur}
+                    onChange={handleOnChange}
                     initialValue={documentCard.origin}
                 />
             </div>

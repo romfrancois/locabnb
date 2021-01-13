@@ -45,10 +45,10 @@ const DatesCard = (): JSX.Element => {
             const endTime = loadDataToState[15];
 
             updatedData = {
-                startDate: `${startDate?.slice(0, 3).reverse().join('-') || '2021-01-01'}`,
-                startTime: startTime || '12:00',
-                endDate: `${endDate?.slice(0, 3).reverse().join('-') || '2021-01-01'}`,
-                endTime: endTime || '12:00',
+                startDate: `${startDate?.slice(0, 3).reverse().join('-')}`, // || '2021-01-01'}`,
+                startTime, // || '12:00',
+                endDate: `${endDate?.slice(0, 3).reverse().join('-')}`, // || '2021-01-01'}`,
+                endTime, // || '12:00',
             };
         }
 

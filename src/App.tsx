@@ -1,7 +1,5 @@
 import React, { useReducer } from 'react';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFile, faSave } from '@fortawesome/free-solid-svg-icons';
 import PricesCard from './components/PricesCard';
 import DatesCard from './components/DatesCard';
 import InfoCard from './components/InfoCard';
@@ -18,12 +16,16 @@ import { State } from './types/State';
 import GoogleSheet from './components/google/GoogleSheet';
 import MenuComponent from './components/Menu';
 
-import styles from './res/css/index.module.css';
+import mainCss from './res/css/index.module.css';
+import ActionMenu from './components/ActionMenu';
 
 type Action =
     | { type: 'setGoogleConnected'; value: boolean }
     | { type: 'enableTableMenu'; value: boolean }
-    | { type: 'setState'; value: { action: 'loadData' | 'save' | 'updated'; row?: number; nextInsertionRow?: number } }
+    | {
+          type: 'action';
+          value: { action: 'loadData' | 'save' | 'updated' | 'createPDF'; row?: number; nextInsertionRow?: number };
+      }
     | { type: 'setNbRenters'; value: number }
     | { type: 'setSelectedRenter'; value: number }
     | { type: 'setInfo'; value: Info }
@@ -77,13 +79,13 @@ function locabnbReducer(state: LocaBnBApp, action: Action) {
                     },
                 },
             };
-        case 'setState':
+        case 'action':
             return {
                 ...state,
                 status: {
                     ...state.status,
                     action: action.value.action,
-                    row: action.value.row,
+                    row: action.value.row ?? state.status.row,
                 },
             };
         case 'setSelectedRenter':
@@ -157,45 +159,16 @@ const App = (): JSX.Element => {
 
     const [locaBnBAppState, dispatch] = useReducer(locabnbReducer, locabnbIS);
 
-    const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
-        e.persist();
-
-        const {
-            currentTarget: { name },
-        } = e;
-
-        switch (name) {
-            case 'resetData':
-                dispatch({ type: 'resetToInitialState' });
-                break;
-            case 'saveData':
-                console.log('Saving Data!');
-                dispatch({
-                    type: 'setState',
-                    value: {
-                        action: 'save',
-                        nextInsertionRow: locaBnBAppState.status.nextInsertionRow,
-                        row: locaBnBAppState.status.row,
-                    },
-                });
-
-                dispatch({ type: 'enableTableMenu', value: false });
-                break;
-            default:
-                break;
-        }
-    };
-
     return (
         <>
             <RenterContext.Provider value={{ state: locaBnBAppState, dispatch }}>
                 <MenuComponent />
             </RenterContext.Provider>
 
-            <div className={styles.container}>
+            <div className={mainCss.container}>
                 <div
                     id="table"
-                    className={`${locaBnBAppState.menuSelected === 'table' ? styles.visible : styles.invisible}`}
+                    className={`${locaBnBAppState.menuSelected === 'table' ? mainCss.visible : mainCss.invisible}`}
                 >
                     <RenterContext.Provider value={{ state: locaBnBAppState, dispatch }}>
                         <GoogleSheet />
@@ -204,8 +177,8 @@ const App = (): JSX.Element => {
 
                 <div
                     id="form"
-                    className={`${styles.form} ${
-                        locaBnBAppState.menuSelected === 'table' ? styles.invisible : styles.visible
+                    className={`${mainCss.form} ${
+                        locaBnBAppState.menuSelected === 'table' ? mainCss.invisible : mainCss.visible
                     }`}
                 >
                     <RenterContext.Provider value={{ state: locaBnBAppState, dispatch }}>
@@ -214,24 +187,8 @@ const App = (): JSX.Element => {
                         <PricesCard />
                         <OptionsCard />
                         <DocumentCard />
+                        <ActionMenu />
                     </RenterContext.Provider>
-
-                    <div className={styles.menuButtons}>
-                        <button type="submit" name="resetData" onClick={handleOnClick}>
-                            <FontAwesomeIcon className="faStyle fa-3x" icon={faFile} />
-                            <span>Remettre à zéro le formulaire</span>
-                        </button>
-
-                        <button
-                            type="submit"
-                            name="saveData"
-                            onClick={handleOnClick}
-                            disabled={Object.keys(locaBnBAppState.info).length <= 0}
-                        >
-                            <FontAwesomeIcon className="faStyle fa-3x" icon={faSave} />
-                            <span>Enregistrer la location</span>
-                        </button>
-                    </div>
                 </div>
             </div>
         </>

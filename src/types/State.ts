@@ -5,7 +5,7 @@ type Google = {
 
 export type State = {
     googleState: Google;
-    action: 'loadData' | 'save' | 'updated';
+    action: 'loadData' | 'save' | 'updated' | 'createPDF';
     row?: number;
     nextInsertionRow?: number;
 };

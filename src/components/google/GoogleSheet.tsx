@@ -327,8 +327,8 @@ const GoogleSheet = (): JSX.Element => {
     }, [action, dates, document, info, options, prices]);
 
     useEffect(() => {
-        if (action === 'save' || (action === 'createPDF' && parsedData.length > 0)) {
-            console.log('GENERATE PDF: ', parsedData, parsedData.length);
+        if ((action === 'save' || action === 'createPDF') && parsedData.length > 0) {
+            console.log('Action is: ', action, parsedData, parsedData.length);
 
             const data2Backup: Array<string> = action === 'createPDF' ? parsedData.concat(['DEMANDE_PDF']) : parsedData;
             console.log('data2Backup: ', data2Backup);

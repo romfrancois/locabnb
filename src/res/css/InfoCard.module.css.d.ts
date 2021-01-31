@@ -12,6 +12,7 @@ declare namespace InfoCardModuleCssNamespace {
         main: string;
         people: string;
         renter: string;
+        tel: string;
     }
 }
 

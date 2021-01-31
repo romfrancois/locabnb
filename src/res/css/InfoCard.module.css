@@ -61,3 +61,21 @@
     justify-content: space-between;
     padding: 1rem;
 }
+
+.tel {
+    display: flex;
+    height: 42px;
+}
+
+.tel > p {
+    position: relative;
+    left: 60px;
+    top: -8px;
+    font-size: 1.2rem;
+    color: rgb(103, 99, 99);
+}
+
+.tel > input {
+    padding-left: 60px;
+    width: 250px;
+}

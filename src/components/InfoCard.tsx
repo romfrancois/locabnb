@@ -11,7 +11,7 @@ import { Address } from '../types/Address';
 import { Contact } from '../types/Contact';
 
 import { RenterContext } from '../App';
-import { Country } from '../types/Country';
+import { Country, CountryCode } from '../types/Country';
 
 import infoCardCss from '../res/css/InfoCard.module.css';
 import inputCss from '../res/css/index.module.css';
@@ -54,10 +54,16 @@ const InfoCard = (): JSX.Element => {
     const sizeOfInfo = Object.keys(info).length;
     const [infoCard, setInfoCard] = useState(sizeOfInfo !== 0 ? info : infoCardIS);
 
+    const [phonePrefix, setPhonePrefix] = useState('');
+
     useEffect(() => {
         let updatedData = {} as Info;
 
         if (loadDataToState.length > 0) {
+            const fullPhoneNumber = loadDataToState[11];
+            const idxHyphen = fullPhoneNumber.indexOf('-');
+            setPhonePrefix(idxHyphen > 0 ? `${fullPhoneNumber.slice(0, idxHyphen)}-` : '0000-');
+
             updatedData = {
                 name: loadDataToState[2],
                 surname: loadDataToState[3],
@@ -71,7 +77,7 @@ const InfoCard = (): JSX.Element => {
                 },
                 contact: {
                     email: loadDataToState[10],
-                    phone: loadDataToState[11],
+                    phone: fullPhoneNumber.slice(idxHyphen + 1),
                 },
             };
         }
@@ -83,6 +89,30 @@ const InfoCard = (): JSX.Element => {
     useEffect(() => {
         dispatch({ type: 'setInfo', value: infoCard });
     }, [dispatch, infoCard]);
+
+    const handleOnChange = React.useCallback(
+        (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
+            const { name, value } = e.target;
+
+            if (name === 'country') {
+                const country = value as keyof typeof Country;
+                const prefix = `00${CountryCode[country]}-`;
+                setPhonePrefix(prefix);
+
+                const phoneNumber = infoCard?.contact?.phone;
+                const idxHyphen = phoneNumber?.indexOf('-');
+                const newTelNumber = idxHyphen > 0 ? phoneNumber.slice(idxHyphen + 1) : phoneNumber;
+
+                if (newTelNumber?.length > 0) {
+                    setInfoCard({
+                        ...infoCard,
+                        contact: { ...infoCard.contact, phone: `${prefix}${newTelNumber}` },
+                    });
+                }
+            }
+        },
+        [infoCard],
+    );
 
     const handleOnBlur = React.useCallback(
         (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>): void => {
@@ -116,13 +146,13 @@ const InfoCard = (): JSX.Element => {
                     setInfoCard({ ...infoCard, contact: { ...infoCard.contact, email: toLower(value) } });
                     break;
                 case 'tel':
-                    setInfoCard({ ...infoCard, contact: { ...infoCard.contact, phone: value } });
+                    setInfoCard({ ...infoCard, contact: { ...infoCard.contact, phone: `${phonePrefix}${value}` } });
                     break;
                 default:
                     break;
             }
         },
-        [infoCard],
+        [infoCard, phonePrefix],
     );
 
     return (
@@ -207,7 +237,8 @@ const InfoCard = (): JSX.Element => {
                         name="country"
                         placeholder="Pays"
                         className={inputCss['input-sm']}
-                        onChange={handleOnBlur}
+                        onChange={handleOnChange}
+                        onBlur={handleOnBlur}
                         defaultValue={infoCard?.address?.country}
                     >
                         <option value="NONE">Pays</option>
@@ -229,14 +260,17 @@ const InfoCard = (): JSX.Element => {
                     onChange={handleOnBlur}
                     defaultValue={infoCard?.contact?.email}
                 />
-                <input
-                    type="tel"
-                    name="tel"
-                    id="tel"
-                    placeholder="Téléphone"
-                    onBlur={handleOnBlur}
-                    defaultValue={infoCard?.contact?.phone}
-                />
+                <div className={infoCardCss.tel}>
+                    <p id="prefix">{phonePrefix}</p>
+                    <input
+                        type="text"
+                        name="tel"
+                        id="tel"
+                        placeholder="Téléphone"
+                        onBlur={handleOnBlur}
+                        defaultValue={infoCard?.contact?.phone}
+                    />
+                </div>
             </div>
         </div>
     );

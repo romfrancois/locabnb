@@ -8,7 +8,7 @@ import { faCommentsDollar } from '@fortawesome/free-solid-svg-icons';
 import { RenterContext } from '../App';
 import { Prices } from '../types/Prices';
 
-import pricesCss from '../res/css/PricesCard.module.css';
+import '../res/css/PricesCard.module.css';
 
 let componentID = nanoid(10);
 
@@ -79,14 +79,14 @@ const PricesCard = (): JSX.Element => {
 
     return (
         <>
-            <div className={pricesCss.main} key={`${componentID}`}>
+            <div className="pricesCardContainer" key={`${componentID}`}>
                 <header>
                     <FontAwesomeIcon className="faStyle fa-3x" icon={faCommentsDollar} />
                     <span>Prix location</span>
                 </header>
-                <div className={pricesCss.prices}>
-                    <div className={pricesCss.price}>
-                        <div className={`${pricesCard.price > 0 ? pricesCss.visible : pricesCss.invisible} `}>Prix</div>
+                <div className="prices">
+                    <div className="price">
+                        <div className={`${pricesCard.price > 0 ? 'visible' : 'invisible'} `}>Prix</div>
                         <input
                             type="number"
                             name="price"
@@ -97,10 +97,8 @@ const PricesCard = (): JSX.Element => {
                             defaultValue={pricesCard?.price === 0 ? 'Prix' : pricesCard.price}
                         />
                     </div>
-                    <div className={pricesCss.arrhes}>
-                        <div className={`${pricesCard.arrhes > 0 ? pricesCss.visible : pricesCss.invisible} `}>
-                            Arrhes
-                        </div>
+                    <div className="arrhes">
+                        <div className={`${pricesCard.arrhes > 0 ? 'visible' : 'invisible'} `}>Arrhes</div>
                         <input
                             type="number"
                             name="arrhes"
@@ -111,10 +109,8 @@ const PricesCard = (): JSX.Element => {
                             defaultValue={pricesCard?.arrhes === 0 ? 'Arrhes' : pricesCard.arrhes}
                         />
                     </div>
-                    <div className={pricesCss.garantie}>
-                        <div className={`${pricesCard.garantie > 0 ? pricesCss.visible : pricesCss.invisible} `}>
-                            Garantie
-                        </div>
+                    <div className="garantie">
+                        <div className={`${pricesCard.garantie > 0 ? 'visible' : 'invisible'} `}>Garantie</div>
                         <input
                             type="number"
                             name="garantie"

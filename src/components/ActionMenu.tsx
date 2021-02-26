@@ -7,7 +7,7 @@ import nanoid from 'nanoid';
 
 import { RenterContext } from '../App';
 
-import mainCss from '../res/css/index.module.css';
+import '../res/css/index.module.css';
 
 const componentID = nanoid(10);
 
@@ -58,7 +58,7 @@ const ActionMenu = (): JSX.Element => {
 
     return (
         <>
-            <div className={mainCss.menuButtons} key={`${componentID}`}>
+            <div className="menuButtons" key={`${componentID}`}>
                 <button type="submit" name="resetData" onClick={handleOnClick}>
                     <FontAwesomeIcon className="faStyle fa-3x" icon={faFile} />
                     <span>Remettre à zéro le formulaire</span>

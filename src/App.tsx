@@ -16,7 +16,8 @@ import { State } from './types/State';
 import GoogleSheet from './components/google/GoogleSheet';
 import MenuComponent from './components/Menu';
 
-import mainCss from './res/css/index.module.css';
+import './res/css/index.module.css';
+
 import ActionMenu from './components/ActionMenu';
 
 type Action =
@@ -52,7 +53,7 @@ const locabnbIS: LocaBnBApp = {
     document: {} as Document,
     loadDataToState: {} as Array<string>,
     status: { googleState: {} } as State,
-    menuSelected: 'form',
+    menuSelected: 'table',
 };
 
 function locabnbReducer(state: LocaBnBApp, action: Action) {
@@ -165,22 +166,14 @@ const App = (): JSX.Element => {
                 <MenuComponent />
             </RenterContext.Provider>
 
-            <div className={mainCss.container}>
-                <div
-                    id="table"
-                    className={`${locaBnBAppState.menuSelected === 'table' ? mainCss.visible : mainCss.invisible}`}
-                >
+            <div className="appContainer">
+                <div id="table" className={`${locaBnBAppState.menuSelected === 'table' ? 'visible' : 'invisible'}`}>
                     <RenterContext.Provider value={{ state: locaBnBAppState, dispatch }}>
                         <GoogleSheet />
                     </RenterContext.Provider>
                 </div>
 
-                <div
-                    id="form"
-                    className={`${mainCss.form} ${
-                        locaBnBAppState.menuSelected === 'table' ? mainCss.invisible : mainCss.visible
-                    }`}
-                >
+                <div id="form" className={`form ${locaBnBAppState.menuSelected === 'table' ? 'invisible' : 'visible'}`}>
                     <RenterContext.Provider value={{ state: locaBnBAppState, dispatch }}>
                         <InfoCard />
                         <DatesCard />

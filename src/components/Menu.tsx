@@ -8,7 +8,7 @@ import nanoid from 'nanoid';
 import { RenterContext } from '../App';
 import GoogleConnection from './google/GoogleConnection';
 
-import menuComponentCss from '../res/css/Menu.module.css';
+import '../res/css/Menu.module.css';
 
 type Action = { type: 'setGoogleConnected'; value: boolean };
 
@@ -52,7 +52,7 @@ const MenuComponent = (): JSX.Element => {
 
     return (
         <>
-            <div className={menuComponentCss.menu} key={`${componentID}`}>
+            <div className="menu" key={`${componentID}`}>
                 <button type="submit" name="setForm" onClick={handleMenu}>
                     <FontAwesomeIcon className="faStyle fa-3x" icon={faWpforms} />
                     <span>Formulaire</span>

@@ -13,8 +13,8 @@ import { Contact } from '../types/Contact';
 import { RenterContext } from '../App';
 import { Country, CountryCode } from '../types/Country';
 
-import infoCardCss from '../res/css/InfoCard.module.css';
-import inputCss from '../res/css/index.module.css';
+import '../res/css/InfoCard.module.css';
+import '../res/css/index.module.css';
 
 let componentID = nanoid(10);
 
@@ -156,19 +156,19 @@ const InfoCard = (): JSX.Element => {
     );
 
     return (
-        <div className={infoCardCss.container} key={`${componentID}`}>
+        <div className="infoCardContainer" key={`${componentID}`}>
             <header>
                 <FontAwesomeIcon className="faStyle fa-3x" icon={faUsers} />
                 <span>Info locataires</span>
             </header>
             <div>
-                <div className={infoCardCss.renter}>
+                <div className="renter">
                     <input
                         type="text"
                         name="name"
                         id="name"
                         placeholder="Prénom"
-                        className={infoCardCss['info-capitalised']}
+                        className="info-capitalised"
                         onChange={handleOnBlur}
                         defaultValue={infoCard?.name}
                     />
@@ -177,12 +177,12 @@ const InfoCard = (): JSX.Element => {
                         name="surname"
                         id="surname"
                         placeholder="Nom"
-                        className={infoCardCss['info-capitalised']}
+                        className="info-capitalised"
                         onChange={handleOnBlur}
                         defaultValue={infoCard?.surname}
                     />
                 </div>
-                <div className={infoCardCss.people}>
+                <div className="people">
                     <input
                         type="number"
                         name="people"
@@ -201,25 +201,25 @@ const InfoCard = (): JSX.Element => {
                     />
                 </div>
             </div>
-            <div className={infoCardCss.address}>
-                <div className={infoCardCss.main}>
+            <div className="address">
+                <div className="main">
                     <input
                         type="text"
                         name="address"
                         id="address"
                         placeholder="Adresse"
-                        className={infoCardCss['info-capitalised']}
+                        className="info-capitalised"
                         onChange={handleOnBlur}
                         defaultValue={infoCard?.address?.street}
                     />
                 </div>
-                <div className={infoCardCss.additional}>
+                <div className="additional">
                     <input
                         type="text"
                         name="postCode"
                         id="postCode"
                         placeholder="Code Postal"
-                        className={`${infoCardCss['info-uppercase']} ${inputCss['input-med']}`}
+                        className="info-uppercase input-med"
                         onChange={handleOnBlur}
                         defaultValue={infoCard?.address?.postCode}
                     />
@@ -228,7 +228,7 @@ const InfoCard = (): JSX.Element => {
                         name="city"
                         id="city"
                         placeholder="Ville"
-                        className={`${infoCardCss['info-capitalised']} ${inputCss['input-med']}`}
+                        className="info-capitalised input-med"
                         onChange={handleOnBlur}
                         defaultValue={infoCard?.address?.city}
                     />
@@ -236,7 +236,7 @@ const InfoCard = (): JSX.Element => {
                         id="country"
                         name="country"
                         placeholder="Pays"
-                        className={inputCss['input-sm']}
+                        className="input-sm"
                         onChange={handleOnChange}
                         onBlur={handleOnBlur}
                         defaultValue={infoCard?.address?.country}
@@ -250,17 +250,17 @@ const InfoCard = (): JSX.Element => {
                     </select>
                 </div>
             </div>
-            <div className={infoCardCss.contact}>
+            <div className="contact">
                 <input
                     type="email"
                     name="email"
                     id="email"
                     placeholder="Email"
-                    className={infoCardCss['info-lowercase']}
+                    className="info-lowercase"
                     onChange={handleOnBlur}
                     defaultValue={infoCard?.contact?.email}
                 />
-                <div className={infoCardCss.tel}>
+                <div className="tel">
                     <p id="prefix">{phonePrefix}</p>
                     <input
                         type="text"

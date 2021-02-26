@@ -8,7 +8,7 @@ import { faFileSignature } from '@fortawesome/free-solid-svg-icons';
 import { RenterContext } from '../App';
 import { Document, Languages, Locations, Origins } from '../types/Document';
 
-import documentCss from '../res/css/DocumentCard.module.css';
+import '../res/css/DocumentCard.module.css';
 
 let componentID = nanoid(10);
 
@@ -28,15 +28,9 @@ type componentProp = {
 
 const DocumentComponent = ({ title, propType, name, onChange, initialValue }: componentProp) => {
     return (
-        <div className={documentCss.subProp}>
+        <div className="subProp">
             <span>{title}</span>
-            <select
-                id={name}
-                name={name}
-                className={documentCss['input-sm']}
-                onChange={onChange}
-                defaultValue={initialValue}
-            >
+            <select id={name} name={name} className="input-sm" onChange={onChange} defaultValue={initialValue}>
                 {Object.keys(propType).map((_key) => (
                     <option key={_key} value={_key}>
                         {_key}
@@ -102,7 +96,7 @@ const DocumentCard = (): JSX.Element => {
     }, [dispatch, documentCard]);
 
     return (
-        <div className={documentCss.main} key={`${componentID}`}>
+        <div className="documentContainer" key={`${componentID}`}>
             <header>
                 <FontAwesomeIcon className="faStyle fa-3x" icon={faFileSignature} />
                 <span>Document</span>

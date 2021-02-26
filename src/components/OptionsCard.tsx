@@ -8,7 +8,7 @@ import { faTasks } from '@fortawesome/free-solid-svg-icons';
 import { RenterContext } from '../App';
 import { Options } from '../types/Options';
 
-import optionsCss from '../res/css/OptionsCard.module.scss';
+import '../res/css/OptionsCard.module.scss';
 import { Origins } from '../types/Document';
 
 let componentID = nanoid(10);
@@ -93,16 +93,14 @@ const OptionsCard = (): JSX.Element => {
 
     return (
         <>
-            <div className={optionsCss.main} key={`${componentID}`}>
+            <div className="optionsCardContainer" key={`${componentID}`}>
                 <header>
                     <FontAwesomeIcon className="faStyle fa-3x" icon={faTasks} />
                     <span>Options</span>
                 </header>
                 <div>
-                    <div className={optionsCss.cleaning}>
-                        <div className={`${optionsCard.cleaning > 0 ? optionsCss.visible : optionsCss.invisible} `}>
-                            Ménage
-                        </div>
+                    <div className="cleaning">
+                        <div className={`${optionsCard.cleaning > 0 ? 'visible' : 'invisible'} `}>Ménage</div>
                         <input
                             type="number"
                             name="cleaning"
@@ -113,8 +111,8 @@ const OptionsCard = (): JSX.Element => {
                             defaultValue={optionsCard.cleaning === 0 ? 'Ménage' : optionsCard.cleaning}
                         />
                     </div>
-                    <div className={optionsCss.sheets}>
-                        <div className={`${optionsCard.sheets > 0 ? optionsCss.visible : optionsCss.invisible} `}>
+                    <div className="sheets">
+                        <div className={`${optionsCard.sheets > 0 ? 'visible' : 'invisible'} `}>
                             Draps & Linges de bain
                         </div>
                         <input
@@ -127,10 +125,8 @@ const OptionsCard = (): JSX.Element => {
                             defaultValue={optionsCard?.sheets === 0 ? 'Draps & Linges de bain' : optionsCard.sheets}
                         />
                     </div>
-                    <div className={`${feesVisibility ? optionsCss.visible : optionsCss.invisible} ${optionsCss.fees}`}>
-                        <div className={`${optionsCard.fees > 0 ? optionsCss.visible : optionsCss.invisible} `}>
-                            Frais de gestion
-                        </div>
+                    <div className={`${feesVisibility ? 'visible' : 'invisible'} fees`}>
+                        <div className={`${optionsCard.fees > 0 ? 'visible' : 'invisible'} `}>Frais de gestion</div>
                         <input
                             type="number"
                             name="fees"

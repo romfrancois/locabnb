@@ -1,0 +1,75 @@
+.tableContainer {
+    background-color: white;
+    opacity: 0.9;
+    margin-top: 1rem;
+}
+
+.tableHeader {
+    background-color: lightgray;
+}
+
+.table-striped tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.table-hover tr:hover {
+    background-color: #b3d4fc;
+}
+
+.flex-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex: 1 0 220px;
+    justify-content: space-between;
+}
+
+.flex-space-evenly {
+    justify-content: space-evenly;
+}
+
+.table-buttons {
+    flex-direction: row;
+    min-width: 16em;
+}
+
+/*
+.tableBody {
+    color: #ddd;
+}
+
+.table-striped tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.table-hover tr:hover {
+    background-color: #b3d4fc;
+}
+
+.table-bordered {
+    border: 1px solid #ddd;
+}
+
+.smallCol {
+    width: 100px;
+}
+
+.tableHeader2 {
+    background-color: springgreen;
+    width: 10%;
+}
+
+.tableSorting {
+    width: 100px;
+} */
+
+/* .sortable > span > *,
+.order > span > * {
+    padding: unset;
+} */
+
+.sortable > .order-4,
+.sortable > .caret-4-asc,
+.sortable > .caret-4-desc {
+    vertical-align: middle;
+}

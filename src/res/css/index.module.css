@@ -8,7 +8,7 @@ a:hover {
     color: white;
 }
 
-.container {
+.appContainer {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -87,6 +87,7 @@ input:focus {
     justify-content: space-evenly;
 }
 
+/* span > *:not(.react-bootstrap-table > *) { */
 span {
     font-size: 1.5rem;
     padding: 1rem;

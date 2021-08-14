@@ -25,7 +25,12 @@ type Action =
     | { type: 'enableTableMenu'; value: boolean }
     | {
           type: 'action';
-          value: { action: 'loadData' | 'save' | 'updated' | 'createPDF'; row?: number; nextInsertionRow?: number };
+          value: {
+              action: 'loadData' | 'save' | 'updated' | 'createPDF' | 'loadDataForSelectedRenter';
+              row?: number;
+              nextInsertionRow?: number;
+              id?: string;
+          };
       }
     | { type: 'setNbRenters'; value: number }
     | { type: 'setSelectedRenter'; value: number }
@@ -53,7 +58,7 @@ const locabnbIS: LocaBnBApp = {
     document: {} as Document,
     loadDataToState: {} as Array<string>,
     status: { googleState: {} } as State,
-    menuSelected: 'table',
+    menuSelected: 'form',
 };
 
 function locabnbReducer(state: LocaBnBApp, action: Action) {
@@ -87,6 +92,7 @@ function locabnbReducer(state: LocaBnBApp, action: Action) {
                     ...state.status,
                     action: action.value.action,
                     row: action.value.row ?? state.status.row,
+                    id: action.value.id ?? state.status.id,
                 },
             };
         case 'setSelectedRenter':

@@ -1,7 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
 import React, { useContext, useEffect, useState } from 'react';
-import Table from 'react-table-lite';
 import nanoid from 'nanoid';
 import { store } from 'react-notifications-component';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -31,11 +30,16 @@ type TableDataType = {
     prenom: string;
     nom: string;
     ville: string;
+    // eslint-disable-next-line camelcase
     debut_Location: string;
+    // eslint-disable-next-line camelcase
     heure_Debut: string;
+    // eslint-disable-next-line camelcase
     fin_Location: string;
+    // eslint-disable-next-line camelcase
     heure_Fin: string;
     prix: string;
+    // eslint-disable-next-line camelcase
     pdf_Dispo: string;
     pdfLink: string;
 };
@@ -64,10 +68,14 @@ type userDataProp = {
     dispatch: any;
 };
 
-const PdfAction = () => {
+const PdfAction = (props: any) => {
+    const {
+        actions: { click },
+    } = props;
+
     return (
         <>
-            <button className="rtl-action-btn-view-btn" type="button">
+            <button className="rtl-action-btn-view-btn" type="button" onClick={click}>
                 <i>
                     <svg
                         fill="currentColor"
@@ -86,11 +94,13 @@ const PdfAction = () => {
     );
 };
 const EditAction = (props: any) => {
-    console.log('HERE-1 actions: ', props);
+    const {
+        actions: { click },
+    } = props;
 
     return (
         <>
-            <button className="rtl-action-btn-edit-btn" type="button" onClick={props.actions.click} id={props.data.id}>
+            <button className="rtl-action-btn-edit-btn" type="button" onClick={click}>
                 <i>
                     <svg
                         fill="currentColor"
@@ -109,33 +119,60 @@ const EditAction = (props: any) => {
     );
 };
 
-const TableActionButton = (props: any) => {
-    const { pdf, id, row, dispatch } = props;
+type TableAction = {
+    pdf: string;
+    id: string;
+    dispatch: any;
+};
 
-    const handleClick = (e: any) => {
-        const {
-            currentTarget: { id },
-        } = e;
+const TableActionButton = (props: TableAction) => {
+    const { pdf, id, dispatch } = props;
 
-        console.log('Click here: ', id, row);
+    const handleEdit = () => {
+        dispatch({
+            type: 'action',
+            value: {
+                action: 'loadDataForSelectedRenter',
+                id,
+            },
+        });
+    };
 
-        // const data2dispatch = tab.get(id);
-        // if (data2dispatch) {
-        //     dispatch({ type: 'loadDataToState', value: data2dispatch });
-        //     dispatch({ type: 'setSelectedRenter', value: Number(row) + 2 });
-        //     dispatch({ type: 'setMenuSelected', value: 'form' });
-        // }
+    const handlePDF = () => {
+        if (pdf) {
+            window.open(pdf, '_blank');
+        }
     };
 
     return (
-        <div className="rtl-action-btn-container">
-            <EditAction actions={{ click: handleClick }} data={{ id }} />
-            {pdf && <PdfAction />}
+        <div className="rtl-action-btn-container customActionButtons">
+            <EditAction actions={{ click: handleEdit }} />
+            {pdf && <PdfAction actions={{ click: handlePDF }} />}
         </div>
     );
 };
 
-function getColumnsDescription({ data, dispatch }: userDataProp) {
+function getColumnsDescription({ dispatch }: Omit<userDataProp, 'data'>) {
+    const sortFunc = (a: string, b: string, order: 'desc' | 'asc') => {
+        const formattedDateA = a.replace(
+            /(\d*)\/(\d*)\/(\d*)/,
+            (toSkip: string, d: string, m: string, y: string) => `${y}-${m}-${d}`,
+        );
+        const dateA = new Date(formattedDateA).getTime();
+
+        const formattedDateB = b.replace(
+            /(\d*)\/(\d*)\/(\d*)/,
+            (toSkip: string, d: string, m: string, y: string) => `${y}-${m}-${d}`,
+        );
+        const dateB = new Date(formattedDateB).getTime();
+
+        if (order === 'asc') {
+            return dateB - dateA;
+        }
+
+        return dateA - dateB; // desc
+    };
+
     return [
         {
             dataField: 'row',
@@ -163,20 +200,22 @@ function getColumnsDescription({ data, dispatch }: userDataProp) {
             dataField: 'startDate',
             sort: true,
             text: 'Début de Location',
+            sortFunc,
         },
         {
             dataField: 'startTime',
-            sort: true,
+            sort: false,
             text: 'Heure début',
         },
         {
             dataField: 'endDate',
             sort: true,
             text: 'Fin de Location',
+            sortFunc,
         },
         {
             dataField: 'endTime',
-            sort: true,
+            sort: false,
             text: 'Heure fin',
         },
         {
@@ -188,19 +227,12 @@ function getColumnsDescription({ data, dispatch }: userDataProp) {
         },
         {
             dataField: 'actions',
-            sort: true,
+            sort: false,
             text: 'Actions',
-            formatter: (actions: { pdf: boolean; id: string; row: any }) => {
-                const { pdf, id, row } = actions;
+            formatter: (actions: { pdf: string; id: string }) => {
+                const { pdf, id } = actions;
 
-                return (
-                    // <div className="flex-inner flex-space-evenly table-buttons">
-                    // <div className="rtl-action-btn-container">
-                    //     <EditAction />
-                    //     {isPDFAvailable && <PdfAction />}
-                    // </div>
-                    <TableActionButton pdf={pdf} id={id} row={row} dispatch={dispatch} />
-                );
+                return <TableActionButton pdf={pdf} id={id} dispatch={dispatch} />;
             },
         },
     ];
@@ -209,18 +241,16 @@ function getColumnsDescription({ data, dispatch }: userDataProp) {
 function UserData({ data, dispatch }: userDataProp) {
     const dataForTable: Array<TableDataType> = [];
     const dataForTable2: Array<any> = [];
-    const tab: Map<string, Array<string>> = new Map();
 
     if (data) {
         data.forEach((value, key) => {
-            console.log(`key ${key} | value ${value}`);
+            console.log(`key1 ${key} | value1 ${value}`);
 
             dataForTable.push(mapRowData2JSONObject(value));
-            tab.set(key, value);
         });
 
         data.forEach((value, key) => {
-            console.log(`key ${key} | value ${value}`);
+            console.log(`key2 ${key} | value2 ${value}`);
 
             dataForTable2.push({
                 row: value[0],
@@ -233,21 +263,13 @@ function UserData({ data, dispatch }: userDataProp) {
                 endTime: value[15],
                 price: value[16],
                 actions: {
-                    pdf: value[25]?.length > 0,
+                    pdf: value[25],
                     id: value[1],
                     row: value[0],
                 },
             });
-            // tab.set(key, value);
         });
     }
-
-    const headerStyle = {
-        color: 'grey',
-    };
-    const dataStyle = {
-        color: 'white',
-    };
 
     return (
         <>
@@ -255,7 +277,7 @@ function UserData({ data, dispatch }: userDataProp) {
                 bootstrap4
                 classes="tableContainer"
                 keyField="key"
-                columns={getColumnsDescription({ data, dispatch })}
+                columns={getColumnsDescription({ dispatch })}
                 data={dataForTable2}
                 hover
                 striped
@@ -264,96 +286,7 @@ function UserData({ data, dispatch }: userDataProp) {
                 headerWrapperClasses="tableHeader"
                 // bodyClasses="tableBody"
                 noDataIndication="Aucune données chargées!"
-                // headerClasses="tableHeader2"
             />
-            {/* <Table
-                data={[]}
-                // Array of JSONObjects(required)
-                // 'id',
-                header={[
-                    'prenom',
-                    'nom',
-                    'debut_Location',
-                    'heure_Debut',
-                    'fin_Location',
-                    'heure_Fin',
-                    'prix',
-                    'pdf_Dispo',
-                ]}
-                // header={['Prénom', 'Nom', 'Date début', 'Heure début', 'Date fin', 'Heure fin', 'Prix']}
-                // Headers should be same as data JSON Object's keys (required)
-                // sortBy={['name', 'surname']}
-                // keys for sorting should be present in header array
-                // searchable
-                // Enable table search field
-                // searchBy={['name']}
-                // keys for sorting should be present in header array
-                // download
-                // Pass true to enable download button
-                // note: If multiselect is enabled,
-                // only checked rows will be downloaded
-                fileName="Table_Data"
-                // Default name of downloaded csv file
-                noDataMessage="Aucune données chargées!"
-                // Custom no data string.
-                limit={20}
-                // No of rows to display at a time
-                // containerStyle={}
-                // Customize table container style
-                headerStyle={headerStyle}
-                // // Customize table header style
-                // rowStyle={}
-                // // Customize table row style
-                dataStyle={dataStyle}
-                // Customize table data cell style
-                showActions
-                // Enable Row Operation
-                // 'edit', 'delete',
-                actionTypes={['view', 'edit']}
-                // Type of Row Operation (case insensitive)
-                // enableMultiSelect
-                // Enable Multi-select
-                defaultCheckedKey="selected"
-                // Key present in data to mark row checked
-                disableCheckedKey="selectDisabled"
-                // Key present in data to make row checkbox disabled
-                // onRowSelect={(args, event, row) => {
-                //     // 'row' returns row object
-                //     // any arguments passed will be before 'event' and 'row'
-                // }}
-                // onAllRowSelect={(args, event, allrows) => {
-                //     // 'allrows' returns JSON objects of all rows of table
-                //     // any arguments passed will be before 'event' and 'allrows'
-                // }}
-                // onRowDelete={(args, event, row) => {
-                //     // 'row' returns row object
-                //     // any arguments passed will be before 'event' and 'row'
-                // }}
-                onRowEdit={(args: any, event: TableDataType, row: any) => {
-                    // 'row' returns row object
-                    // any arguments passed will be before 'event' and 'row'
-
-                    console.log('event: ', event);
-                    const data2dispatch = tab.get(event.id);
-                    if (data2dispatch) {
-                        dispatch({ type: 'loadDataToState', value: data2dispatch });
-                        dispatch({ type: 'setSelectedRenter', value: Number(event.row) + 2 });
-                        dispatch({ type: 'setMenuSelected', value: 'form' });
-                    }
-                }}
-                onRowView={(args: any, event: TableDataType, row: any) => {
-                    // 'row' returns row object
-                    // any arguments passed will be before 'event' and 'row'
-
-                    console.log('event: ', event);
-
-                    const isPdfGenerated = event.pdfLink?.length > 0;
-
-                    if (isPdfGenerated) {
-                        window.open(event.pdfLink, '_blank');
-                    }
-                }}
-            /> */}
         </>
     );
 }
@@ -369,6 +302,7 @@ const GoogleSheet = (): JSX.Element => {
                 action,
                 nextInsertionRow,
                 row,
+                id,
             },
             info,
             dates,
@@ -587,6 +521,18 @@ const GoogleSheet = (): JSX.Element => {
                 });
         }
     }, [action, dispatch, nextInsertionRow, parsedData, row]);
+
+    useEffect(() => {
+        if (action === 'loadDataForSelectedRenter' && id) {
+            console.log('Action is: ', action);
+
+            const retrievedDataForRenter = rawRenters?.get(id);
+            if (retrievedDataForRenter) {
+                dispatch({ type: 'loadDataToState', value: retrievedDataForRenter });
+                dispatch({ type: 'setMenuSelected', value: 'form' });
+            }
+        }
+    }, [action, dispatch, id, rawRenters]);
 
     return (
         <>

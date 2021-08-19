@@ -123,10 +123,11 @@ type TableAction = {
     pdf: string;
     id: string;
     dispatch: any;
+    rowIndex: string;
 };
 
 const TableActionButton = (props: TableAction) => {
-    const { pdf, id, dispatch } = props;
+    const { pdf, id, dispatch, rowIndex } = props;
 
     const handleEdit = () => {
         dispatch({
@@ -134,6 +135,7 @@ const TableActionButton = (props: TableAction) => {
             value: {
                 action: 'loadDataForSelectedRenter',
                 id,
+                row: Number(rowIndex) + 2,
             },
         });
     };
@@ -229,10 +231,9 @@ function getColumnsDescription({ dispatch }: Omit<userDataProp, 'data'>) {
             dataField: 'actions',
             sort: false,
             text: 'Actions',
-            formatter: (actions: { pdf: string; id: string }) => {
-                const { pdf, id } = actions;
-
-                return <TableActionButton pdf={pdf} id={id} dispatch={dispatch} />;
+            formatter: (actions: { pdf: string; id: string; row: string }) => {
+                const { pdf, id, row } = actions;
+                return <TableActionButton pdf={pdf} id={id} rowIndex={row} dispatch={dispatch} />;
             },
         },
     ];
@@ -523,7 +524,7 @@ const GoogleSheet = (): JSX.Element => {
     }, [action, dispatch, nextInsertionRow, parsedData, row]);
 
     useEffect(() => {
-        if (action === 'loadDataForSelectedRenter' && id) {
+        if (action === 'loadDataForSelectedRenter' && id && row) {
             console.log('Action is: ', action);
 
             const retrievedDataForRenter = rawRenters?.get(id);
@@ -532,7 +533,7 @@ const GoogleSheet = (): JSX.Element => {
                 dispatch({ type: 'setMenuSelected', value: 'form' });
             }
         }
-    }, [action, dispatch, id, rawRenters]);
+    }, [action, dispatch, id, rawRenters, row]);
 
     return (
         <>
